@@ -17,9 +17,8 @@ public class PQINodeView extends NodeView<PQINodeModel> {
      */
     protected PQINodeView(final PQINodeModel nodeModel) {
         super(nodeModel);
-
-        // TODO instantiate the components of the view here.
-
+        
+        setComponent(new ProteinTreeTestPanel(nodeModel.getData()));
     }
 
     /**
@@ -53,7 +52,6 @@ public class PQINodeView extends NodeView<PQINodeModel> {
      */
     @Override
     protected void onOpen() {
-
         // TODO things to do when opening the view
     }
 
