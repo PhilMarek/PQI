@@ -2,6 +2,8 @@ package de.mpc.pqi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -16,7 +18,6 @@ import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
@@ -24,6 +25,7 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 
 
 /**
@@ -54,13 +56,12 @@ public class PQINodeModel extends NodeModel {
                     PQINodeModel.DEFAULT_COUNT,
                     Integer.MIN_VALUE, Integer.MAX_VALUE);
     
+    private Object[][] objectData;
 
     /**
      * Constructor for the node model.
      */
     protected PQINodeModel() {
-    
-        // TODO one incoming port and one outgoing port is assumed
         super(1, 1);
     }
 
@@ -70,10 +71,20 @@ public class PQINodeModel extends NodeModel {
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
+    	BufferedDataTable quantPeptides = inData[0];
+		List<Object[]> data = new ArrayList<>();
+    	quantPeptides.forEach(row -> {
+    		Object[] rowData = new Object[row.getNumCells() + 1];
+    		rowData[0] = row.getKey();
+    		rowData[1] = row.getCell(0).toString();
+    		for (int i = 2 ; i < row.getNumCells() + 1 ; i++) rowData[i] = Long.toString((long)Double.parseDouble(row.getCell(i - 1).toString()));
+    		data.add(rowData);
+    	});
+    	objectData = new Object[data.size()][];
+    	for (int i = 0 ; i < data.size() ; i++) objectData[i] = data.get(i);
+    	
         // TODO do something here
         logger.info("Node Model Stub... this is not yet implemented !");
-
         
         // the data table spec of the single output table, 
         // the table will have three columns:
@@ -113,6 +124,14 @@ public class PQINodeModel extends NodeModel {
         return new BufferedDataTable[]{out};
     }
 
+    /**
+     * Returns the input data.
+     * @return
+     */
+    public Object[][] getData() {
+    	return objectData;
+    }
+    
     /**
      * {@inheritDoc}
      */
