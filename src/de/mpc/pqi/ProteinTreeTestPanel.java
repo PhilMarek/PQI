@@ -16,9 +16,11 @@ import javax.swing.JPanel;
 
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.PeptideModel.State;
+import de.mpc.pqi.model.PeptideModel.State.Run;
+import de.mpc.pqi.model.ProteinModel;
+import de.mpc.pqi.view.properties.DataPropertyPanel;
 import de.mpc.pqi.view.tree.ProteinTree;
 import de.mpc.pqi.view.tree.ProteinTreeModel;
-import de.mpc.pqi.model.ProteinModel;
 
 public class ProteinTreeTestPanel extends JPanel {
 	private static final long serialVersionUID = -2631147602208704811L;
@@ -27,11 +29,11 @@ public class ProteinTreeTestPanel extends JPanel {
 		if (args.length < 1) {
 			System.out.println("Missing program argument: Filepath quants_peptides.csv");
 		} else {
-			ProteinTreeTestPanel panel = new ProteinTreeTestPanel(readData(args[0], "#", "\"", "\t", true));
-			
-			JFrame frame = new JFrame("FrameDemo");
+			JFrame frame = new JFrame("");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.getContentPane().add(panel, BorderLayout.WEST);
+			frame.getContentPane().add(new ProteinTreeTestPanel(readData(args[0], "#", "\"", "\t", true)), BorderLayout.WEST);
+//			frame.getContentPane().add(new CSVFilePropertyPanel(), BorderLayout.CENTER);
+//			frame.getContentPane().add(new DataPropertyPanel(), BorderLayout.CENTER);
 			//TODO(Ayoub): frame.getContentPane().add(diagram, BorderLayout.CENTER);
 			frame.pack();
 			frame.setVisible(true);
@@ -61,11 +63,11 @@ public class ProteinTreeTestPanel extends JPanel {
     			}
     			List<State> states = new ArrayList<>();
     			for (int k = 0 ; k < 5 ; k++) {
-    				List<Long> abundances = new ArrayList<>();
+    				List<Run> runs = new ArrayList<>();
     				for (int l = 0 ; l < 3 ; l++) {
-    					abundances.add(Long.parseLong((String) peptideData[3 + k * 3 + l]));
+    					runs.add(new Run("Run" + l, Long.parseLong((String) peptideData[3 + k * 3 + l])));
     				}
-    				states.add(new State(abundances));
+    				states.add(new State("State" + k, runs));
     			}
     			PeptideModel peptide = new PeptideModel(peptideData[0].toString(), states); 
     			protein.addPeptide(peptide);

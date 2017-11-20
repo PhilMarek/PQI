@@ -11,14 +11,38 @@ import java.util.List;
  */
 public class PeptideModel extends PQIModel {
 	public static class State {
-		private List<Long> abundances;
-		
-		public State(List<Long> abundances) {
-			this.abundances = abundances;
+		public static class Run {
+			private String name;
+			private long abundance;
+			
+			public String getName() {
+				return name;
+			}
+
+			public long getAbundance() {
+				return abundance;
+			}
+
+			public Run(String name, long abundance) {
+				this.name = name;
+				this.abundance = abundance;
+			}
 		}
 		
-		public List<Long> getAbundances() {
-			return abundances;
+		private List<Run> runs;
+		private String name;
+		
+		public State(String name, List<Run> runs) {
+			this.name = name;
+			this.runs = runs;
+		}
+		
+		public List<Run> getRuns() {
+			return runs;
+		}
+		
+		public String getName() {
+			return name;
 		}
 	}
 	
