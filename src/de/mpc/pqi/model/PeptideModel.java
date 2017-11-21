@@ -15,6 +15,11 @@ public class PeptideModel extends PQIModel {
 			private String name;
 			private long abundance;
 			
+			public Run(String name, long abundance) {
+				this.name = name;
+				this.abundance = abundance;
+			}
+			
 			public String getName() {
 				return name;
 			}
@@ -23,26 +28,22 @@ public class PeptideModel extends PQIModel {
 				return abundance;
 			}
 
-			public Run(String name, long abundance) {
-				this.name = name;
-				this.abundance = abundance;
-			}
 		}
 		
-		private List<Run> runs;
 		private String name;
+		private List<Run> runs;
 		
 		public State(String name, List<Run> runs) {
 			this.name = name;
 			this.runs = runs;
 		}
 		
-		public List<Run> getRuns() {
-			return runs;
-		}
-		
 		public String getName() {
 			return name;
+		}
+		
+		public List<Run> getRuns() {
+			return runs;
 		}
 	}
 	
