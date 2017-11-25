@@ -12,21 +12,21 @@ public class GridBagHelper {
 		m_columnWeights = columnWeights;
 	}
 
-	public GridBagConstraints getConstraints(int gridX, int gridY, int spanX, int spanY) {
-		GridBagConstraints constraints = getConstraints(gridX, gridY);
-		constraints.gridwidth = spanX;
-		constraints.gridheight = spanY;
+	public GridBagConstraints getConstraints(int column, int row, int columnSpan, int rowSpan) {
+		GridBagConstraints constraints = getConstraints(column, row);
+		constraints.gridwidth = columnSpan;
+		constraints.gridheight = rowSpan;
 		return constraints;
 	}
 	
-	public GridBagConstraints getConstraints(int gridX, int gridY) {
+	public GridBagConstraints getConstraints(int column, int row) {
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.gridx = gridX;
-		constraints.gridy = gridY;
+		constraints.gridx = column;
+		constraints.gridy = row;
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.weightx = m_rowWeights[gridX];
-		constraints.weighty = m_columnWeights[gridY];
+		constraints.weightx = m_columnWeights[column];
+		constraints.weighty = m_rowWeights[row];
 		return constraints;
 	}
 }
