@@ -1,9 +1,7 @@
 package de.mpc.pqi.view.tree;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -51,36 +49,29 @@ public class ProteinTreeModel implements TreeModel {
 	 * Returns a filtered tree model based on filterString and function.
 	 * @param filterString
 	 * @param function
+	 * @param filterForProteins 
 	 * @return
 	 */
-	public ProteinTreeModel getFilteredModel(final String filterString, Function<PQIModel, Boolean> function) {
+	public ProteinTreeModel getFilteredModel(final String filterString, Function<PQIModel, Boolean> function, boolean filterForProteins) {
 		//if root fulfills the filter conditions or if filterString is empty, just return everything
 		if (function.apply(getRoot()) || filterString.trim().isEmpty()) return this;
 
 		List<ProteinModel> filteredProteins = new ArrayList<>();
-		Set<ProteinModel> proteins = new HashSet<>();
-		
-		// Filtering proteins. If a protein fulfills the filter condition, all corresponding peptides are added.
-		proteinData.stream().filter(protein -> function.apply(protein)).collect(Collectors.toList()).forEach(protein -> {
-			filteredProteins.add(protein);
-			proteins.add(protein);
-		});
-		
-		// For each protein which is not already in the protein set, the list of peptides is filtered.
-		// If any peptide fulfills the filter conditions, this (or all matching)
-		// peptide and the corresponding protein is added
-		proteinData.stream().filter(protein -> !proteins.contains(protein) && !ROOT.equals(protein))
-				.collect(Collectors.toList()).forEach(protein -> {
-			List<PeptideModel> peptides = protein.getPeptides().stream()
-					.filter(peptide -> function.apply(peptide)).collect(Collectors.toList());
-			if (!peptides.isEmpty()) {
-				ProteinModel newProtein = new ProteinModel(protein.getName());
-				peptides.forEach(peptide -> newProtein.addPeptide(peptide));
-				filteredProteins.add(newProtein);
-			}
-		});
-		
-		return new ProteinTreeModel(filteredProteins);
+		if (filterForProteins) {
+			// Filtering proteins. If a protein fulfills the filter condition, all corresponding peptides are added.
+			proteinData.stream().filter(protein -> function.apply(protein)).collect(Collectors.toList()).forEach(protein -> {
+				filteredProteins.add(protein);
+			});
+			return new ProteinTreeModel(filteredProteins);
+		} else {
+			// Filtering peptides. If any peptide of a protein fulfills the filter condition, the complete protein is added.
+			proteinData.forEach(protein -> {
+				List<PeptideModel> peptides = protein.getPeptides().stream()
+						.filter(peptide -> function.apply(peptide)).collect(Collectors.toList());
+				if (!peptides.isEmpty()) filteredProteins.add(protein);
+			});
+			return new ProteinTreeModel(filteredProteins);
+		}
 	}
 
 	/**
