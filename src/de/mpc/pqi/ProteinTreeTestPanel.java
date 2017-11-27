@@ -21,10 +21,6 @@ import de.mpc.pqi.model.ProteinModel;
 import de.mpc.pqi.view.diagram.ChartDataWrapper;
 import de.mpc.pqi.view.diagram.ColumnValuePair;
 import de.mpc.pqi.view.diagram.PQICategoryChart;
-<<<<<<< HEAD
-import de.mpc.pqi.view.properties.DataPropertyPanel;
-=======
->>>>>>> branch 'master' of https://github.com/PhilMarek/PQI.git
 import de.mpc.pqi.view.tree.ProteinTree;
 import de.mpc.pqi.view.tree.ProteinTree.ProteinTreeSelectionListener;
 import de.mpc.pqi.view.tree.ProteinTreeModel;
@@ -40,17 +36,8 @@ public class ProteinTreeTestPanel extends JPanel {
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.getContentPane().add(new ProteinTreeTestPanel(readData(args[0], "#", "\"", "\t", true)),
 					BorderLayout.WEST);
-<<<<<<< HEAD
 			// frame.getContentPane().add(new CSVFilePropertyPanel(), BorderLayout.CENTER);
 			//frame.getContentPane().add(new DataPropertyPanel(), BorderLayout.CENTER);
-=======
-			// frame.getContentPane().add(new CSVFilePropertyPanel(),
-			// BorderLayout.CENTER);
-			// frame.getContentPane().add(new DataPropertyPanel(),
-			// BorderLayout.CENTER);
-			// TODO(Ayoub): frame.getContentPane().add(diagram,
-			// BorderLayout.CENTER);
->>>>>>> branch 'master' of https://github.com/PhilMarek/PQI.git
 			frame.pack();
 			frame.setVisible(true);
 		}
@@ -60,7 +47,6 @@ public class ProteinTreeTestPanel extends JPanel {
 		setLayout(new FlowLayout());
 		ProteinTree tree = new ProteinTree(new ProteinTreeModel(parseData(objects)));
 		PQICategoryChart chart = new PQICategoryChart();
-<<<<<<< HEAD
 		add(tree);
 		add(chart.createChart(new ArrayList<>()));
 		
@@ -83,34 +69,6 @@ public class ProteinTreeTestPanel extends JPanel {
 				chart.updateChart(list);
 			}
 		});
-		// TODO(Ayoub): tree.addSelectionListener((selection) ->
-		// System.out.println(selection));
-		
-=======
-		tree.add(chart.createChart(new ArrayList<>()));
-		tree.addSelectionListener(new ProteinTreeSelectionListener() {
-			@Override
-			public void selectionChanged(Object selection) {
-				PeptideModel peptideModel = (PeptideModel) selection;
-				List<ChartDataWrapper> list = new ArrayList<ChartDataWrapper>();
-				ChartDataWrapper data = new ChartDataWrapper(peptideModel.getName());
-				for (int i = 0; i < peptideModel.getStates().size(); i++) {
-					State state = peptideModel.getStates().get(i);
-					for (int j = 0; j < state.getRuns().size(); j++) {
-						Run run = state.getRuns().get(j);
-						Long value = run.getAbundance();
-						String column = (i + 1) + " R" + (j + 1);
-						data.addColumnValuePair(new ColumnValuePair(column, value.doubleValue()));
-					}
-				}
-				list.add(data);
-				chart.updateChart(list);
-			}
-		});
-		// TODO(Ayoub): tree.addSelectionListener((selection) ->
-		// System.out.println(selection));
-		add(tree);
->>>>>>> branch 'master' of https://github.com/PhilMarek/PQI.git
 	}
 
 	private List<ProteinModel> parseData(Object[][] objects) {
@@ -118,7 +76,6 @@ public class ProteinTreeTestPanel extends JPanel {
 		Map<String, ProteinModel> proteinMap = new HashMap<>();
 		for (int i = 0; i < objects.length; i++) {
 			Object[] peptideData = objects[i];
-<<<<<<< HEAD
 			ProteinModel protein = proteinMap.get((String)peptideData[1]);
 			if (protein == null) {
 				protein = new ProteinModel((String) peptideData[1]);
@@ -135,27 +92,6 @@ public class ProteinTreeTestPanel extends JPanel {
 			}
 			PeptideModel peptide = new PeptideModel(peptideData[0].toString(), states);
 			protein.addPeptide(peptide);
-=======
-			String[] proteinsForPeptide = peptideData[1].toString().split("/");
-			for (int j = 0; j < proteinsForPeptide.length; j++) {
-				ProteinModel protein = proteinMap.get(proteinsForPeptide[j]);
-				if (protein == null) {
-					protein = new ProteinModel(proteinsForPeptide[j]);
-					proteins.add(protein);
-					proteinMap.put(proteinsForPeptide[j], protein);
-				}
-				List<State> states = new ArrayList<>();
-				for (int k = 0; k < 5; k++) {
-					List<Run> runs = new ArrayList<>();
-					for (int l = 0; l < 3; l++) {
-						runs.add(new Run("Run" + l, Long.parseLong((String) peptideData[3 + k * 3 + l])));
-					}
-					states.add(new State("State" + k, runs));
-				}
-				PeptideModel peptide = new PeptideModel(peptideData[0].toString(), states);
-				protein.addPeptide(peptide);
-			}
->>>>>>> branch 'master' of https://github.com/PhilMarek/PQI.git
 		}
 		return proteins;
 	}
