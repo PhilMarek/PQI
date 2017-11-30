@@ -1,10 +1,9 @@
 package de.mpc.pqi.view.diagram;
 
-import java.util.List;
-
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -13,26 +12,33 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import de.mpc.pqi.model.PeptideModel;
+import de.mpc.pqi.model.PeptideModel.State;
+import de.mpc.pqi.model.PeptideModel.State.Run;
+import de.mpc.pqi.model.ProteinModel;
+
 public class PQICategoryChart {
 
 	private CategoryPlot categoryPlot;
 
-	private CategoryDataset createDataset(List<ChartDataWrapper> data) {
+	private CategoryDataset createDataset(PeptideModel peptideModel) {
 		final DefaultCategoryDataset result = new DefaultCategoryDataset();
 
-		for (ChartDataWrapper chartDataWrapper : data) {
-			for (ColumnValuePair columnValuePair : chartDataWrapper.getSeriesValuePairs()) {
-				result.addValue(columnValuePair.getValue(), chartDataWrapper.getRowKey(),
-						columnValuePair.getColumnKey());
+		if (peptideModel != null) {
+			for (State state : peptideModel.getStates()) {
+				for (Run run : state.getRuns()) {
+
+					Long value = run.getAbundance();
+					result.addValue(value.doubleValue(), peptideModel.getName(), state.getName() + " " + run.getName());
+				}
 			}
 		}
-
 		return result;
 	}
 
-	public ChartPanel createChart(List<ChartDataWrapper> data) {
-		final CategoryDataset dataset1 = createDataset(data);
-		final NumberAxis rangeAxis1 = new NumberAxis("log10 (Sum Quantity)");
+	public ChartPanel createChart(PeptideModel peptideModel) {
+		final CategoryDataset dataset1 = createDataset(peptideModel);
+		final NumberAxis rangeAxis1 = new NumberAxis("Abundance");
 		rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
 		final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
@@ -42,17 +48,42 @@ public class PQICategoryChart {
 		this.categoryPlot.setDomainGridlinesVisible(true);
 
 		final CategoryAxis domainAxis = new CategoryAxis("Runs");
+		domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 		CombinedDomainCategoryPlot plot = new CombinedDomainCategoryPlot(domainAxis);
 
 		plot.add(this.categoryPlot);
 
-		return new ChartPanel(new JFreeChart(plot));
+		ChartPanel chartPanel = new ChartPanel(new JFreeChart(plot));
+
+		return chartPanel;
 	}
 
-	public void updateChart(List<ChartDataWrapper> data) {
+	public void updateChart(PeptideModel peptideModel) {
 
-		categoryPlot.setDataset(createDataset(data));
+		categoryPlot.setDataset(createDataset(peptideModel));
 
 	}
 
+	private CategoryDataset createDataset(ProteinModel proteinModel) {
+		final DefaultCategoryDataset result = new DefaultCategoryDataset();
+
+		if (proteinModel != null) {
+			for (PeptideModel peptideModel : proteinModel.getPeptides())
+				if (peptideModel != null) {
+					for (State state : peptideModel.getStates()) {
+						for (Run run : state.getRuns()) {
+
+							Long value = run.getAbundance();
+							result.addValue(value.doubleValue(), peptideModel.getName(),
+									state.getName() + " " + run.getName());
+						}
+					}
+				}
+		}
+		return result;
+	}
+
+	public void updateChart(ProteinModel proteinModel) {
+		categoryPlot.setDataset(createDataset(proteinModel));
+	}
 }

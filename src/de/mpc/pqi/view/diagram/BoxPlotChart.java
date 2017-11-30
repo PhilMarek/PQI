@@ -1,7 +1,6 @@
 package de.mpc.pqi.view.diagram;
 
 import java.awt.Font;
-import java.util.List;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,45 +12,23 @@ import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
 import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
-public class BoxAndWhiskerChart {
+import de.mpc.pqi.model.PeptideModel;
+
+public class BoxPlotChart {
 
 	private CategoryPlot categoryPlot;
 
-	private BoxAndWhiskerCategoryDataset createDataSet(List<BoxplotData> data) {
-		// final int seriesCount = 3;
-		// final int categoryCount = 4;
-		// final int entityCount = 22;
+	private BoxAndWhiskerCategoryDataset createDataSet(PeptideModel peptideModel) {
 
 		final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
-		// for (int i = 0; i < seriesCount; i++) {
-		// for (int j = 0; j < categoryCount; j++) {
-		// final List list = new ArrayList();
-		// // add some values...
-		// for (int k = 0; k < entityCount; k++) {
-		// final double value1 = 10.0 + Math.random() * 3;
-		// list.add(new Double(value1));
-		// final double value2 = 11.25 + Math.random(); // concentrate
-		// // values in
-		// // the
-		// // middle
-		// list.add(new Double(value2));
-		// }
-		// dataset.add(list, "Series " + i, " Type " + j);
-		// }
-		//
-		// }
-
-		for (BoxplotData boxplotData : data) {
-			dataset.add(boxplotData.getControleValues(), "Controle", boxplotData.getCategroy());
-			dataset.add(boxplotData.getDiseaseValues(), "Disease", boxplotData.getCategroy());
-		}
 
 		return dataset;
 	}
 
-	public ChartPanel getView(List<BoxplotData> data) {
+	@SuppressWarnings("deprecation")
+	public ChartPanel getView(PeptideModel peptideModel) {
 
-		BoxAndWhiskerCategoryDataset dataset = createDataSet(data);
+		BoxAndWhiskerCategoryDataset dataset = createDataSet(peptideModel);
 
 		CategoryAxis xAxis = new CategoryAxis("Type");
 		NumberAxis yAxis = new NumberAxis("Value");
@@ -70,7 +47,7 @@ public class BoxAndWhiskerChart {
 		return chartPanel;
 	}
 
-	public void update(List<BoxplotData> data) {
-		this.categoryPlot.setDataset(createDataSet(data));
+	public void update(PeptideModel peptideModel) {
+		this.categoryPlot.setDataset(createDataSet(peptideModel));
 	}
 }
