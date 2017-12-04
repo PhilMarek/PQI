@@ -22,11 +22,6 @@ import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
 import de.mpc.pqi.view.ProteinView;
 import de.mpc.pqi.view.properties.PropertyDialog;
-import de.mpc.pqi.view.diagram.PQICategoryChart;
-import de.mpc.pqi.view.table.Table;
-import de.mpc.pqi.view.tree.ProteinTree;
-import de.mpc.pqi.view.tree.ProteinTree.ProteinTreeSelectionListener;
-import de.mpc.pqi.view.tree.ProteinTreeModel;
 
 public class ProteinTreeTestPanel extends JPanel {
 	private static final long serialVersionUID = -2631147602208704811L;
@@ -36,16 +31,6 @@ public class ProteinTreeTestPanel extends JPanel {
 			System.out.println("Missing program argument: Filepath quants_peptides.csv");
 		} else {
 			new ProteinTreeTestPanel(args[0]);
-			JFrame frame = new JFrame("");
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.getContentPane().add(new ProteinTreeTestPanel(readData(args[0], "#", "\"", "\t", true)),
-					BorderLayout.WEST);
-			// frame.getContentPane().add(new CSVFilePropertyPanel(),
-			// BorderLayout.CENTER);
-			// frame.getContentPane().add(new DataPropertyPanel(),
-			// BorderLayout.CENTER);
-			frame.pack();
-			frame.setVisible(true);
 		}
 	}
 
@@ -68,15 +53,6 @@ public class ProteinTreeTestPanel extends JPanel {
 		JMenu file = new JMenu("File");
 		JMenuItem configure = new JMenuItem("Configure");
 		
-	public ProteinTreeTestPanel(Object[][] objects) {
-		setLayout(new VerticalLayout());
-		ProteinTree tree = new ProteinTree(new ProteinTreeModel(parseData(objects)));
-		PQICategoryChart chart = new PQICategoryChart();
-		Table table = new Table();
-
-		add(tree);
-		add(chart.createChart(null));
-
 		configure.addActionListener(l -> {
 			PropertyDialog dialog = new PropertyDialog();
 			dialog.pack();
@@ -91,18 +67,6 @@ public class ProteinTreeTestPanel extends JPanel {
 					proteinView.setModel(parseData(data, pqf));
 				} catch (IOException e) {
 					e.printStackTrace();
-		tree.addSelectionListener(new ProteinTreeSelectionListener() {
-			@Override
-			public void selectionChanged(Object selection) {
-				if (selection instanceof PeptideModel) {
-					PeptideModel peptideModel = (PeptideModel) selection;
-					chart.updateChart(peptideModel);
-
-					if (table.getTable() == null) {
-						add(table.initTable(peptideModel));
-					} else {
-						table.updateTable(peptideModel);
-					}
 				}
 			}
 		});
@@ -110,7 +74,6 @@ public class ProteinTreeTestPanel extends JPanel {
 		file.add(configure);
 		menuBar.add(file);
 		return menuBar;
-
 	}
 
 	private static List<ProteinModel> parseData(String[][] objects, PeptideQuantificationFile pqf) {
@@ -120,15 +83,10 @@ public class ProteinTreeTestPanel extends JPanel {
     	for (String[] peptideData : objects) {
     		String proteinName = peptideData[pqf.getProteinColumn() + 1].toString();
 			ProteinModel protein = proteinMap.get(proteinName);
-		Map<String, ProteinModel> proteinMap = new HashMap<>();
-		for (int i = 0; i < objects.length; i++) {
-			Object[] peptideData = objects[i];
-			ProteinModel protein = proteinMap.get((String) peptideData[1]);
 			if (protein == null) {
 				protein = new ProteinModel("Protein"); //TODO proteinName);
 				proteins.add(protein);
 				proteinMap.put(proteinName, protein);
-				proteinMap.put((String) peptideData[1], protein);
 			}
 			List<State> states = new ArrayList<>();
 			for (StateConfiguration stateConfig : pqf.getStateConfigurations()) {
