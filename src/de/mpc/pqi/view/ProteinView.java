@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.ProteinModel;
+import de.mpc.pqi.view.diagram.BoxPlotChart;
 import de.mpc.pqi.view.diagram.PQICategoryChart;
 import de.mpc.pqi.view.table.Table;
 import de.mpc.pqi.view.tree.ProteinTree;
@@ -21,6 +22,7 @@ public class ProteinView extends JPanel {
 	private ProteinTree tree;
 	private PQICategoryChart chart;
 	private Table table;
+	private BoxPlotChart boxPlotChart;
 
 	public ProteinView() {
 		initGUI();
@@ -32,6 +34,7 @@ public class ProteinView extends JPanel {
 		tree = new ProteinTree();
 		chart = new PQICategoryChart();
 		table = new Table();
+		boxPlotChart = new BoxPlotChart();
 	}
 
 	private void initLayout() {
@@ -46,6 +49,7 @@ public class ProteinView extends JPanel {
 		add(tree, constraints.getConstraints(0, 0));
 		add(chart.createChart(null), constraints.getConstraints(1, 0));
 		add(table.initTable(null), constraints.getConstraints(0, 1, 2, 1));
+//		add(boxPlotChart.getView(null), constraints.getConstraints(1,0 ));
 	}
 
 	private void initControl() {
@@ -80,6 +84,7 @@ public class ProteinView extends JPanel {
 					}
 					if (!peptideModels.isEmpty()) {
 						chart.updateChart(peptideModels);
+//						boxPlotChart.update(peptideModels.get(0));
 					}
 
 				}

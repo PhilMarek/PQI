@@ -1,6 +1,8 @@
 package de.mpc.pqi.view.diagram;
 
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,6 +15,8 @@ import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
 import de.mpc.pqi.model.PeptideModel;
+import de.mpc.pqi.model.PeptideModel.State;
+import de.mpc.pqi.model.PeptideModel.State.Run;
 
 public class BoxPlotChart {
 
@@ -21,6 +25,18 @@ public class BoxPlotChart {
 	private BoxAndWhiskerCategoryDataset createDataSet(PeptideModel peptideModel) {
 
 		final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
+
+		if(peptideModel != null){
+			for (State state : peptideModel.getStates()) {
+				List<Double> values = new ArrayList<>();
+
+				for (Run run : state.getRuns()) {
+					values.add(run.getAbundance());
+				}
+				
+				dataset.add(values, peptideModel.getName(), state.getName());
+			}
+		}
 
 		return dataset;
 	}
@@ -40,7 +56,7 @@ public class BoxPlotChart {
 		this.categoryPlot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
 
 		ChartPanel chartPanel = new ChartPanel(
-				new JFreeChart("Box-and-Whisker Demo", new Font("SansSerif", Font.BOLD, 14), this.categoryPlot, true));
+				new JFreeChart("BoxPlots", new Font("SansSerif", Font.BOLD, 14), this.categoryPlot, true));
 
 		chartPanel.setSize(50, 100);
 

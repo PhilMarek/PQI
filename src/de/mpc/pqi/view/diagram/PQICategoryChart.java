@@ -22,6 +22,7 @@ import de.mpc.pqi.model.ProteinModel;
 public class PQICategoryChart {
 
 	private CategoryPlot categoryPlot;
+	private NumberAxis rangeAxis1;
 
 	private CategoryDataset createDataset(PeptideModel peptideModel) {
 		final DefaultCategoryDataset result = new DefaultCategoryDataset();
@@ -89,8 +90,8 @@ public class PQICategoryChart {
 
 	public ChartPanel createChart(PeptideModel peptideModel) {
 		final CategoryDataset dataset1 = createDataset(peptideModel);
-		final NumberAxis rangeAxis1 = new NumberAxis("Abundance");
-		rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		this.rangeAxis1 = new NumberAxis("Abundance");
+		this.rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
 		final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
 		renderer1.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
