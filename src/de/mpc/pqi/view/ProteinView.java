@@ -1,9 +1,12 @@
 package de.mpc.pqi.view;
 
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.ProteinModel;
@@ -32,14 +35,14 @@ public class ProteinView extends JPanel {
 	}
 
 	private void initLayout() {
-//		setLayout(new BorderLayout());
-//		
-//		add(tree, BorderLayout.WEST);
-//		add(chart.createChart(null), BorderLayout.CENTER);
-//		add(table.initTable(null), BorderLayout.SOUTH);
-		
+		// setLayout(new BorderLayout());
+		//
+		// add(tree, BorderLayout.WEST);
+		// add(chart.createChart(null), BorderLayout.CENTER);
+		// add(table.initTable(null), BorderLayout.SOUTH);
+
 		setLayout(new GridBagLayout());
-		GridBagHelper constraints = new GridBagHelper(new double[] {0.1, 0.1}, new double[] {0.1, 0.4});
+		GridBagHelper constraints = new GridBagHelper(new double[] { 0.1, 0.1 }, new double[] { 0.1, 0.4 });
 		add(tree, constraints.getConstraints(0, 0));
 		add(chart.createChart(null), constraints.getConstraints(1, 0));
 		add(table.initTable(null), constraints.getConstraints(0, 1, 2, 1));
@@ -52,11 +55,33 @@ public class ProteinView extends JPanel {
 				if (selection instanceof PeptideModel) {
 					PeptideModel peptideModel = (PeptideModel) selection;
 					chart.updateChart(peptideModel);
-					//table.updateTable(peptideModel);
 				} else if (selection instanceof ProteinModel) {
 					ProteinModel proteinModel = (ProteinModel) selection;
 					chart.updateChart(proteinModel);
 					table.setData(proteinModel);
+				}
+			}
+		});
+
+		table.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (!e.getValueIsAdjusting()) {
+					List<PeptideModel> peptideModels = new ArrayList<>();
+
+					for (int i : table.getSelectedRows()) {
+						if (i == 0) {
+							chart.updateChart(table.getProteinModel());
+						} else {
+							peptideModels.add(table.getValueAt(i - 1));
+						}
+					}
+					if (!peptideModels.isEmpty()) {
+						chart.updateChart(peptideModels);
+					}
+
 				}
 			}
 		});

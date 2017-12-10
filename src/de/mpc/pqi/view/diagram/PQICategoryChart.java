@@ -1,5 +1,7 @@
 package de.mpc.pqi.view.diagram;
 
+import java.util.List;
+
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -36,6 +38,55 @@ public class PQICategoryChart {
 		return result;
 	}
 
+	private CategoryDataset createDataset(ProteinModel proteinModel) {
+		final DefaultCategoryDataset result = new DefaultCategoryDataset();
+
+		if (proteinModel != null) {
+			for (PeptideModel peptideModel : proteinModel.getPeptides())
+				if (peptideModel != null) {
+					for (State state : peptideModel.getStates()) {
+						for (Run run : state.getRuns()) {
+
+							Double value = run.getAbundance();
+							result.addValue(value, peptideModel.getName(), state.getName() + " " + run.getName());
+						}
+					}
+				}
+		}
+		return result;
+	}
+
+	private CategoryDataset createDataset(List<PeptideModel> peptideModels) {
+		final DefaultCategoryDataset result = new DefaultCategoryDataset();
+
+		if (peptideModels != null) {
+			for (PeptideModel peptideModel : peptideModels)
+				if (peptideModel != null) {
+					for (State state : peptideModel.getStates()) {
+						for (Run run : state.getRuns()) {
+
+							Double value = run.getAbundance();
+							result.addValue(value, peptideModel.getName(), state.getName() + " " + run.getName());
+						}
+					}
+				}
+		}
+		return result;
+	}
+
+	public void updateChart(ProteinModel proteinModel) {
+		categoryPlot.setDataset(createDataset(proteinModel));
+	}
+
+	public void updateChart(PeptideModel peptideModel) {
+
+		categoryPlot.setDataset(createDataset(peptideModel));
+	}
+
+	public void updateChart(List<PeptideModel> peptideModels) {
+		categoryPlot.setDataset(createDataset(peptideModels));
+	}
+
 	public ChartPanel createChart(PeptideModel peptideModel) {
 		final CategoryDataset dataset1 = createDataset(peptideModel);
 		final NumberAxis rangeAxis1 = new NumberAxis("Abundance");
@@ -56,34 +107,5 @@ public class PQICategoryChart {
 		ChartPanel chartPanel = new ChartPanel(new JFreeChart(plot));
 
 		return chartPanel;
-	}
-
-	public void updateChart(PeptideModel peptideModel) {
-
-		categoryPlot.setDataset(createDataset(peptideModel));
-
-	}
-
-	private CategoryDataset createDataset(ProteinModel proteinModel) {
-		final DefaultCategoryDataset result = new DefaultCategoryDataset();
-
-		if (proteinModel != null) {
-			for (PeptideModel peptideModel : proteinModel.getPeptides())
-				if (peptideModel != null) {
-					for (State state : peptideModel.getStates()) {
-						for (Run run : state.getRuns()) {
-
-							Double value = run.getAbundance();
-							result.addValue(value, peptideModel.getName(),
-									state.getName() + " " + run.getName());
-						}
-					}
-				}
-		}
-		return result;
-	}
-
-	public void updateChart(ProteinModel proteinModel) {
-		categoryPlot.setDataset(createDataset(proteinModel));
 	}
 }
