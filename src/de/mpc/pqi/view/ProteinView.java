@@ -52,10 +52,11 @@ public class ProteinView extends JPanel {
 				if (selection instanceof PeptideModel) {
 					PeptideModel peptideModel = (PeptideModel) selection;
 					chart.updateChart(peptideModel);
-					table.updateTable(peptideModel);
+					//table.updateTable(peptideModel);
 				} else if (selection instanceof ProteinModel) {
 					ProteinModel proteinModel = (ProteinModel) selection;
 					chart.updateChart(proteinModel);
+					table.setData(proteinModel);
 				}
 			}
 		});
