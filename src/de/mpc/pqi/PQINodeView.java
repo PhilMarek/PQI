@@ -2,6 +2,8 @@ package de.mpc.pqi;
 
 import org.knime.core.node.NodeView;
 
+import de.mpc.pqi.view.ProteinView;
+
 /**
  * <code>NodeView</code> for the "PQI" Node.
  * 
@@ -9,7 +11,8 @@ import org.knime.core.node.NodeView;
  * @author 
  */
 public class PQINodeView extends NodeView<PQINodeModel> {
-
+	private ProteinView view;
+	
     /**
      * Creates a new view.
      * 
@@ -17,8 +20,9 @@ public class PQINodeView extends NodeView<PQINodeModel> {
      */
     protected PQINodeView(final PQINodeModel nodeModel) {
         super(nodeModel);
-        
-        setComponent(new ProteinTreeTestPanel(nodeModel.getData()));
+        view = new ProteinView();
+        setComponent(view);
+        view.setModel(nodeModel.getData());
     }
 
     /**
@@ -33,6 +37,7 @@ public class PQINodeView extends NodeView<PQINodeModel> {
             (PQINodeModel)getNodeModel();
         assert nodeModel != null;
         
+        view.setModel(nodeModel.getData());
         // be aware of a possibly not executed nodeModel! The data you retrieve
         // from your nodemodel could be null, emtpy, or invalid in any kind.
         
