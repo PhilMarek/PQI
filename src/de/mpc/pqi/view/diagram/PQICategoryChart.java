@@ -28,7 +28,7 @@ public class PQICategoryChart {
 			for (State state : peptideModel.getStates()) {
 				for (Run run : state.getRuns()) {
 
-					Long value = run.getAbundance();
+					Double value = run.getAbundance();
 					result.addValue(value.doubleValue(), peptideModel.getName(), state.getName() + " " + run.getName());
 				}
 			}
@@ -73,8 +73,8 @@ public class PQICategoryChart {
 					for (State state : peptideModel.getStates()) {
 						for (Run run : state.getRuns()) {
 
-							Long value = run.getAbundance();
-							result.addValue(value.doubleValue(), peptideModel.getName(),
+							Double value = run.getAbundance();
+							result.addValue(value, peptideModel.getName(),
 									state.getName() + " " + run.getName());
 						}
 					}
