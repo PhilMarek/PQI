@@ -42,7 +42,7 @@ public class ProteinTreeModel implements TreeModel {
 	 * @param proteinData
 	 */
 	public ProteinTreeModel(List<ProteinModel> proteinData) {
-		this.proteinData = proteinData;
+		this.proteinData = proteinData == null ? new ArrayList<>() : proteinData;
 	}
 
 	/**

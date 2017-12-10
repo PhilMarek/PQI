@@ -93,7 +93,7 @@ public class ProteinTree extends JPanel {
 	 * Constructor. Initializes the gui, its layout and the controls. Furthermore, it sets the tree model.
 	 * @param model
 	 */
-	public ProteinTree(ProteinTreeModel model) {
+	public ProteinTree() {
 		initGUI();
 
 		m_filterActionMap.put(CONTAINS, data -> { 
@@ -102,7 +102,6 @@ public class ProteinTree extends JPanel {
 		m_filterActionMap.put(PREFIX, data -> { 
 			return data.getName().trim().toLowerCase().startsWith(m_filterTextField.getText().trim().toLowerCase()); 
 		});
-		setModel(model);		
 
 		initLayout();
 		initControl();
@@ -133,7 +132,7 @@ public class ProteinTree extends JPanel {
 		
 		m_selectionModel = new DefaultTreeSelectionModel();
 		m_selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		m_tree = new JTree();
+		m_tree = new JTree(new ProteinTreeModel(null));
 		m_tree.setSelectionModel(m_selectionModel);
 		m_scrollPane = new JScrollPane(m_tree);
 		
