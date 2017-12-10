@@ -48,6 +48,8 @@ public class Table {
 
 		ModelFieldGroup abundacesField = new ModelFieldGroup("abundances", "Abundance");
 
+		ModelField uniqueField = new ModelField("unique", "Unique");
+
 		for (State state : proteinModel.getPeptides().get(0).getStates()) {
 			ModelFieldGroup s = new ModelFieldGroup(UUID.randomUUID().toString(), state.getName());
 
@@ -60,7 +62,7 @@ public class Table {
 			abundacesField.withChild(s);
 		}
 
-		IModelFieldGroup groups[] = new IModelFieldGroup[] { proteinField, peptidesField, abundacesField };
+		IModelFieldGroup groups[] = new IModelFieldGroup[] { proteinField, peptidesField, abundacesField, uniqueField };
 
 		ModelField fields[] = ModelFieldGroup.getBottomFields(groups);
 
@@ -77,13 +79,20 @@ public class Table {
 
 			ModelRow row = new ModelRow(fields.length);
 
-			for (int i = 1; i < fields.length; i++) {
+			for (int i = 1; i < fields.length - 1; i++) {
 				if (i == 1) {
 					row.setValue(i, peptideModel.getName());
 				} else {
 					row.setValue(i, values.get(i - 2));
 				}
 			}
+
+			if (peptideModel.isUnique()) {
+				row.setValue(fields.length - 1, "\u2713");
+			} else {
+				row.setValue(fields.length - 1, "X");
+			}
+
 			rows.add(row);
 		}
 
