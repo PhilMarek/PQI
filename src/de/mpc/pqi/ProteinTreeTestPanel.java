@@ -1,6 +1,11 @@
 package de.mpc.pqi;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +45,7 @@ public class ProteinTreeTestPanel extends JPanel {
 	private ProteinTreeTestPanel(String filePath) {
 		frame = new JFrame("");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		proteinView = new ProteinView(null);
+		proteinView = new ProteinView();
 		frame.getContentPane().add(proteinView);
 		frame.setJMenuBar(getMenuBar());
 		
@@ -54,17 +59,28 @@ public class ProteinTreeTestPanel extends JPanel {
 		JMenuItem configure = new JMenuItem("Configure");
 		
 		configure.addActionListener(l -> {
+			PeptideQuantificationFile pqf = null;
+			CSVFile csvFile = null;
+			pqf = (PeptideQuantificationFile) readObject("pqf");
+			csvFile = (CSVFile) readObject("csv");
+
+
 			PropertyDialog dialog = new PropertyDialog();
+			if (pqf != null) dialog.setPeptideQuantificationFile(pqf);
+			if (csvFile != null) dialog.setCSVFile(csvFile);
+			
 			dialog.pack();
 			dialog.setVisible(true);
 			while (dialog.isVisible());
-			PeptideQuantificationFile pqf = dialog.getPeptideQuantificationFile();
-			CSVFile csvFile = dialog.getCSVFile();
+			pqf = dialog.getPeptideQuantificationFile();
+			csvFile = dialog.getCSVFile();
 
 			if (pqf != null && csvFile != null) {
 				try {
 					String[][] data = csvFile.readData();
 					proteinView.setModel(parseData(data, pqf));
+					writeObject(csvFile, "csv");
+					writeObject(pqf, "pqf");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -75,6 +91,37 @@ public class ProteinTreeTestPanel extends JPanel {
 		menuBar.add(file);
 		return menuBar;
 	}
+	
+	private void writeObject(Object object, String fileName) {
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(object);
+			oos.close();
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private Object readObject(String fileName) {
+		try {
+			FileInputStream fis = new FileInputStream(fileName);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			Object object = ois.readObject();
+			ois.close();
+			fis.close();
+			return object;
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
 
 	private static List<ProteinModel> parseData(String[][] objects, PeptideQuantificationFile pqf) {
 		List<ProteinModel> proteins = new ArrayList<>();
@@ -84,7 +131,7 @@ public class ProteinTreeTestPanel extends JPanel {
     		String proteinName = peptideData[pqf.getProteinColumn() + 1].toString();
 			ProteinModel protein = proteinMap.get(proteinName);
 			if (protein == null) {
-				protein = new ProteinModel("Protein"); //TODO proteinName);
+				protein = new ProteinModel(proteinName);
 				proteins.add(protein);
 				proteinMap.put(proteinName, protein);
 			}
@@ -95,7 +142,7 @@ public class ProteinTreeTestPanel extends JPanel {
 					double abundance = Double.parseDouble(peptideData[runConfig.getColumn() + 1].toString());
 					runs.add(new Run(runConfig.getName(), abundance));
 				}
-				states.add(new State(stateConfig.getName(), runs, stateConfig.isControlGroup()));
+				states.add(new State(stateConfig.getName(), runs));
 			}
 			protein.addPeptide(new PeptideModel(peptideData[0].toString(), states));
 		}
