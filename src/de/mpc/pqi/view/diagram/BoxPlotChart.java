@@ -47,9 +47,9 @@ public class BoxPlotChart {
 
 		BoxAndWhiskerCategoryDataset dataset = createDataSet(peptideModel);
 
-		CategoryAxis xAxis = new CategoryAxis("Type");
+		CategoryAxis xAxis = new CategoryAxis("State");
 		xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-		NumberAxis yAxis = new NumberAxis("Value");
+		NumberAxis yAxis = new NumberAxis("Abundance");
 		yAxis.setAutoRangeIncludesZero(false);
 		BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
 		renderer.setFillBox(true);
@@ -60,8 +60,7 @@ public class BoxPlotChart {
 		this.categoryPlot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
 
 		ChartPanel chartPanel = new ChartPanel(
-				new JFreeChart("BoxPlots", new Font("SansSerif", Font.BOLD, 14), this.categoryPlot, true));
-
+				new JFreeChart(this.categoryPlot));
 		chartPanel.setSize(50, 100);
 
 		return chartPanel;
