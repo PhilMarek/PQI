@@ -17,12 +17,18 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.PeptideModel.State;
 import de.mpc.pqi.model.PeptideModel.State.Run;
+import de.mpc.pqi.view.transform.AbundanceValueType;
+import de.mpc.pqi.view.transform.TransformValueHelper;
 import de.mpc.pqi.model.ProteinModel;
 
 public class PQICategoryChart {
 
 	private CategoryPlot categoryPlot;
 	private NumberAxis rangeAxis1;
+
+	private AbundanceValueType valueType;
+
+	private Object lastData;
 
 	private CategoryDataset createDataset(PeptideModel peptideModel) {
 		final DefaultCategoryDataset result = new DefaultCategoryDataset();
@@ -32,7 +38,17 @@ public class PQICategoryChart {
 				for (Run run : state.getRuns()) {
 
 					Double value = run.getAbundance();
-					result.addValue(value.doubleValue(), peptideModel.getName(), state.getName() + " " + run.getName());
+
+					if (valueType == AbundanceValueType.ABUNDANCE) {
+						result.addValue(TransformValueHelper.transformValue(value, valueType), peptideModel.getName(),
+								state.getName() + " " + run.getName());
+					} else if (valueType == AbundanceValueType.LOG10) {
+						result.addValue(TransformValueHelper.transformValue(value, valueType), peptideModel.getName(),
+								state.getName() + " " + run.getName());
+					} else if (valueType == AbundanceValueType.ARCSIN) {
+						result.addValue(TransformValueHelper.transformValue(value, valueType), peptideModel.getName(),
+								state.getName() + " " + run.getName());
+					}
 				}
 			}
 		}
@@ -49,7 +65,16 @@ public class PQICategoryChart {
 						for (Run run : state.getRuns()) {
 
 							Double value = run.getAbundance();
-							result.addValue(value, peptideModel.getName(), state.getName() + " " + run.getName());
+							if (valueType == AbundanceValueType.ABUNDANCE) {
+								result.addValue(TransformValueHelper.transformValue(value, valueType),
+										peptideModel.getName(), state.getName() + " " + run.getName());
+							} else if (valueType == AbundanceValueType.LOG10) {
+								result.addValue(TransformValueHelper.transformValue(value, valueType),
+										peptideModel.getName(), state.getName() + " " + run.getName());
+							} else if (valueType == AbundanceValueType.ARCSIN) {
+								result.addValue(TransformValueHelper.transformValue(value, valueType),
+										peptideModel.getName(), state.getName() + " " + run.getName());
+							}
 						}
 					}
 				}
@@ -67,7 +92,16 @@ public class PQICategoryChart {
 						for (Run run : state.getRuns()) {
 
 							Double value = run.getAbundance();
-							result.addValue(value, peptideModel.getName(), state.getName() + " " + run.getName());
+							if (valueType == AbundanceValueType.ABUNDANCE) {
+								result.addValue(TransformValueHelper.transformValue(value, valueType),
+										peptideModel.getName(), state.getName() + " " + run.getName());
+							} else if (valueType == AbundanceValueType.LOG10) {
+								result.addValue(TransformValueHelper.transformValue(value, valueType),
+										peptideModel.getName(), state.getName() + " " + run.getName());
+							} else if (valueType == AbundanceValueType.ARCSIN) {
+								result.addValue(TransformValueHelper.transformValue(value, valueType),
+										peptideModel.getName(), state.getName() + " " + run.getName());
+							}
 						}
 					}
 				}
@@ -75,23 +109,37 @@ public class PQICategoryChart {
 		return result;
 	}
 
-	public void updateChart(ProteinModel proteinModel) {
-		categoryPlot.setDataset(createDataset(proteinModel));
+	public void updateChartData(Object data) {
+		this.lastData = data;
+
+		if (data instanceof ProteinModel) {
+			ProteinModel proteinModel = (ProteinModel) data;
+			categoryPlot.setDataset(createDataset(proteinModel));
+		} else if (data instanceof PeptideModel) {
+			PeptideModel peptideModel = (PeptideModel) data;
+			categoryPlot.setDataset(createDataset(peptideModel));
+		} else if (data instanceof List) {
+			@SuppressWarnings("unchecked")
+			List<PeptideModel> peptideModels = (List<PeptideModel>) data;
+			categoryPlot.setDataset(createDataset(peptideModels));
+		}
 	}
 
-	public void updateChart(PeptideModel peptideModel) {
+	public ChartPanel createChart(PeptideModel peptideModel, AbundanceValueType valueType) {
 
-		categoryPlot.setDataset(createDataset(peptideModel));
-	}
-
-	public void updateChart(List<PeptideModel> peptideModels) {
-		categoryPlot.setDataset(createDataset(peptideModels));
-	}
-
-	public ChartPanel createChart(PeptideModel peptideModel) {
+		this.valueType = valueType;
+		this.lastData = peptideModel;
 		final CategoryDataset dataset1 = createDataset(peptideModel);
 		this.rangeAxis1 = new NumberAxis("Abundance");
 		this.rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+		if (valueType == AbundanceValueType.ABUNDANCE) {
+			this.rangeAxis1.setLabel("Abundance");
+		} else if (valueType == AbundanceValueType.LOG10) {
+			this.rangeAxis1.setLabel("log10(abundance)");
+		} else if (valueType == AbundanceValueType.ARCSIN) {
+			this.rangeAxis1.setLabel("arcsin(abundance)");
+		}
 
 		final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
 		renderer1.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
@@ -108,5 +156,19 @@ public class PQICategoryChart {
 		ChartPanel chartPanel = new ChartPanel(new JFreeChart(plot));
 
 		return chartPanel;
+	}
+
+	public void updateValueType(AbundanceValueType valueType) {
+		this.valueType = valueType;
+
+		if (valueType == AbundanceValueType.ABUNDANCE) {
+			this.rangeAxis1.setLabel("Abundance");
+		} else if (valueType == AbundanceValueType.LOG10) {
+			this.rangeAxis1.setLabel("log10(abundance)");
+		} else if (valueType == AbundanceValueType.ARCSIN) {
+			this.rangeAxis1.setLabel("arcsin(abundance)");
+		}
+		
+		updateChartData(lastData);
 	}
 }

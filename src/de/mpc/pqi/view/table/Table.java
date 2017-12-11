@@ -18,6 +18,8 @@ import org.quinto.swing.table.view.JBroTable;
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.PeptideModel.State;
 import de.mpc.pqi.model.PeptideModel.State.Run;
+import de.mpc.pqi.view.transform.AbundanceValueType;
+import de.mpc.pqi.view.transform.TransformValueHelper;
 import de.mpc.pqi.model.ProteinModel;
 
 public class Table {
@@ -26,19 +28,25 @@ public class Table {
 
 	private ProteinModel proteinModel;
 
-	public JScrollPane initTable(ProteinModel proteinModel) {
+	private AbundanceValueType valueType;
+
+	public JScrollPane initTable(ProteinModel proteinModel, AbundanceValueType valueType) {
 		this.table = new JBroTable();
+
+		this.valueType = valueType;
 
 		this.table.setBackground(Color.WHITE);
 
 		if (proteinModel != null) {
 			this.proteinModel = proteinModel;
-			setData(proteinModel);
+			setData(proteinModel, this.valueType);
 		}
 		return this.table.getScrollPane();
 	}
 
-	public void setData(ProteinModel proteinModel) {
+	public void setData(ProteinModel proteinModel, AbundanceValueType valueType) {
+
+		this.valueType = valueType;
 
 		this.proteinModel = proteinModel;
 
@@ -47,6 +55,14 @@ public class Table {
 		ModelField peptidesField = new ModelField("peptides", "Peptides");
 
 		ModelFieldGroup abundacesField = new ModelFieldGroup("abundances", "Abundance");
+
+		if (valueType == AbundanceValueType.ABUNDANCE) {
+			abundacesField.setCaption("Abundance");
+		} else if (valueType == AbundanceValueType.LOG10) {
+			abundacesField.setCaption("log10(abundance)");
+		} else if (valueType == AbundanceValueType.ARCSIN) {
+			abundacesField.setCaption("arcsin(abundance)");
+		}
 
 		ModelField uniqueField = new ModelField("unique", "Unique");
 
@@ -116,7 +132,7 @@ public class Table {
 			}
 		}
 
-		return values;
+		return TransformValueHelper.transformValues(values, valueType);
 	}
 
 	public void addListSelectionListener(ListSelectionListener listener) {
@@ -135,4 +151,9 @@ public class Table {
 		return this.table.getSelectedRows();
 	}
 
+	public void updateValueType(AbundanceValueType abundanceValueType) {
+		if (proteinModel != null) {
+			setData(proteinModel, abundanceValueType);
+		}
+	}
 }

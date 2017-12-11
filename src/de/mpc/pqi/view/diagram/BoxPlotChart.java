@@ -52,6 +52,8 @@ public class BoxPlotChart {
 		BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
 		renderer.setFillBox(true);
 		renderer.setToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
+		renderer.setOutlinePaint(null);
+		
 
 		this.categoryPlot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
 
