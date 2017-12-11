@@ -7,6 +7,7 @@ import java.util.List;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.BoxAndWhiskerToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -47,6 +48,7 @@ public class BoxPlotChart {
 		BoxAndWhiskerCategoryDataset dataset = createDataSet(peptideModel);
 
 		CategoryAxis xAxis = new CategoryAxis("Type");
+		xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 		NumberAxis yAxis = new NumberAxis("Value");
 		yAxis.setAutoRangeIncludesZero(false);
 		BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
