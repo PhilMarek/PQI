@@ -14,6 +14,7 @@ import org.quinto.swing.table.model.ModelField;
 import org.quinto.swing.table.model.ModelFieldGroup;
 import org.quinto.swing.table.model.ModelRow;
 import org.quinto.swing.table.view.JBroTable;
+import org.quinto.swing.table.view.JBroTableModel;
 
 import de.mpc.pqi.model.protein.PeptideModel;
 import de.mpc.pqi.model.protein.ProteinModel;
@@ -30,6 +31,21 @@ public class PeptideTable {
 
 	public JScrollPane initTable(ProteinModel proteinModel, AbundanceValueType valueType) {
 		this.table = new JBroTable();
+		this.table.setModel(new JBroTableModel(null) {
+
+			private static final long serialVersionUID = -8306397569789436774L;
+			
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				if (columnIndex == 17) return Boolean.class;
+				else return super.getColumnClass(columnIndex);
+			}
+			
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return columnIndex == 17;
+			}
+		});
 
 		this.valueType = valueType;
 
@@ -52,15 +68,7 @@ public class PeptideTable {
 
 		ModelField peptidesField = new ModelField("peptides", "Peptides");
 
-		ModelFieldGroup abundacesField = new ModelFieldGroup("abundances", "Abundance");
-
-		if (valueType == AbundanceValueType.ABUNDANCE) {
-			abundacesField.setCaption("Abundance");
-		} else if (valueType == AbundanceValueType.LOG10) {
-			abundacesField.setCaption("log10(abundance)");
-		} else if (valueType == AbundanceValueType.ARCSIN) {
-			abundacesField.setCaption("arcsin(abundance)");
-		}
+		ModelFieldGroup abundacesField = new ModelFieldGroup("abundances", valueType.getCaption());
 
 		ModelField uniqueField = new ModelField("unique", "Unique");
 
@@ -92,7 +100,6 @@ public class PeptideTable {
 			List<Double> values = getValuesOfPeptide(peptideModel);
 
 			ModelRow row = new ModelRow(fields.length);
-
 			for (int i = 1; i < fields.length - 1; i++) {
 				if (i == 1) {
 					row.setValue(i, peptideModel.getName());
@@ -101,11 +108,7 @@ public class PeptideTable {
 				}
 			}
 
-			if (peptideModel.isUnique()) {
-				row.setValue(fields.length - 1, "\u2713");
-			} else {
-				row.setValue(fields.length - 1, "X");
-			}
+			row.setValue(fields.length - 1, peptideModel.isUnique());
 
 			rows.add(row);
 		}
