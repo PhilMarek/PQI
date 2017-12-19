@@ -8,8 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,7 +24,7 @@ import de.mpc.pqi.model.PeptideModel.State;
 import de.mpc.pqi.model.PeptideModel.State.Run;
 import de.mpc.pqi.model.ProteinModel;
 import de.mpc.pqi.model.properties.CSVFile;
-import de.mpc.pqi.model.properties.PeptideQuantificationFile;
+import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
 import de.mpc.pqi.view.ProteinView;
@@ -59,28 +61,31 @@ public class ProteinTreeTestPanel extends JPanel {
 		JMenuItem configure = new JMenuItem("Configure");
 		
 		configure.addActionListener(l -> {
-			PeptideQuantificationFile pqf = null;
-			CSVFile csvFile = null;
-			pqf = (PeptideQuantificationFile) readObject("pqf");
-			csvFile = (CSVFile) readObject("csv");
-
+			PepQuantFileConfiguration pepQuantFileConfig = null;
+			CSVFile pepQuantFile = null;
+			CSVFile protQuantFile = null;
+			pepQuantFileConfig = (PepQuantFileConfiguration) readObject("pqfc");
+			pepQuantFile = (CSVFile) readObject("pepcsv");
+			protQuantFile = (CSVFile) readObject("protcsv");
 
 			PropertyDialog dialog = new PropertyDialog();
-			if (pqf != null) dialog.setPeptideQuantificationFile(pqf);
-			if (csvFile != null) dialog.setCSVFile(csvFile);
+			if (pepQuantFileConfig != null) dialog.setPepQuantFileConfiguration(pepQuantFileConfig);
+			if (pepQuantFile != null) dialog.setPepQuantFile(pepQuantFile);
+			if (protQuantFile != null) dialog.setProtQuantFile(protQuantFile);
 			
 			dialog.pack();
 			dialog.setVisible(true);
 			while (dialog.isVisible());
-			pqf = dialog.getPeptideQuantificationFile();
-			csvFile = dialog.getCSVFile();
+			pepQuantFileConfig = dialog.getPeptideQuantificationFile();
+			pepQuantFile = dialog.getPepQuantFile();
 
-			if (pqf != null && csvFile != null) {
+			if (pepQuantFileConfig != null && pepQuantFile != null && protQuantFile != null) {
 				try {
-					String[][] data = csvFile.readData();
-					proteinView.setModel(parseData(data, pqf));
-					writeObject(csvFile, "csv");
-					writeObject(pqf, "pqf");
+					String[][] pepQuantData = pepQuantFile.readData();
+					String[][] protQuantData = protQuantFile.readData();
+					proteinView.setModel(parseData(pepQuantData, protQuantData, pepQuantFileConfig));
+					writeObject(pepQuantFile, "csv");
+					writeObject(pepQuantFileConfig, "pqf");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -123,11 +128,25 @@ public class ProteinTreeTestPanel extends JPanel {
 		
 	}
 
-	private static List<ProteinModel> parseData(String[][] objects, PeptideQuantificationFile pqf) {
+	private static List<ProteinModel> parseData(String[][] peptideQuantificationData, 
+			String[][] proteinQuantificationData, PepQuantFileConfiguration pqf) {
 		List<ProteinModel> proteins = new ArrayList<>();
     	Map<String, ProteinModel> proteinMap = new HashMap<>();
 
-    	for (String[] peptideData : objects) {
+    	Set<ProteinModel> quantifiedProteins = new HashSet<>();
+    	Set<String> quantifiedProteinGroups = new HashSet<>();
+    	List<String> bla = new ArrayList<>();
+  		for (String[] proteinData : proteinQuantificationData) {
+    		for (String s : proteinData[0].split("/")) {
+    			quantifiedProteinGroups.add(s);
+    			bla.add(s);
+    		}
+    	}
+    	System.out.println(quantifiedProteinGroups.size());
+    	System.out.println(bla.size());
+
+    	
+    	for (String[] peptideData : peptideQuantificationData) {
     		String proteinName = peptideData[pqf.getProteinColumn() + 1].toString();
 			ProteinModel protein = proteinMap.get(proteinName);
 			if (protein == null) {

@@ -9,16 +9,18 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import de.mpc.pqi.model.properties.CSVFile;
-import de.mpc.pqi.model.properties.PeptideQuantificationFile;
+import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
 
 public class PropertyDialog extends JDialog {
 	private static final long serialVersionUID = 1284951775403174558L;
 
-	private CSVFilePropertyPanel csvFilePropertyPanel;
+	private CSVFilePropertyPanel pepQuantFilePropertyPanel;
+	private CSVFilePropertyPanel protQuantFilePropertyPanel;
 	private DataPropertyPanel dataPropertyPanel;
 	
-	private CSVFile csvFile;
-	private PeptideQuantificationFile peptideQuantificationFile;
+	private CSVFile pepQuantFile;
+	private CSVFile protQuantFile;
+	private PepQuantFileConfiguration pepQuantFileConfig;
 
 	private CardLayout cardLayout;
 	
@@ -27,8 +29,7 @@ public class PropertyDialog extends JDialog {
 	
 	private JButton nextButton;
 	private JButton cancelButton;
-	
-	
+
 	public PropertyDialog() {
 		initGUI();
 		initLayout();
@@ -38,9 +39,13 @@ public class PropertyDialog extends JDialog {
 	}
 
 	private void initGUI() {
-		csvFilePropertyPanel = new CSVFilePropertyPanel();
-		csvFile = new CSVFile();
-		csvFilePropertyPanel.setModel(csvFile);
+		pepQuantFilePropertyPanel = new CSVFilePropertyPanel();
+		pepQuantFile = new CSVFile();
+		pepQuantFilePropertyPanel.setModel(pepQuantFile);
+		
+		protQuantFilePropertyPanel = new CSVFilePropertyPanel();
+		protQuantFile = new CSVFile();
+		protQuantFilePropertyPanel.setModel(protQuantFile);
 		
 		dataPropertyPanel = new DataPropertyPanel();
 		
@@ -53,8 +58,9 @@ public class PropertyDialog extends JDialog {
 		
 		cardLayout = new CardLayout();
 		propertyPanel = new JPanel(cardLayout);
-		propertyPanel.add(csvFilePropertyPanel, "CSV File");
+		propertyPanel.add(pepQuantFilePropertyPanel, "Peptide Quantification File");
 		propertyPanel.add(dataPropertyPanel, "File properties");
+		propertyPanel.add(protQuantFilePropertyPanel, "Protein Quantification File");
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -67,50 +73,64 @@ public class PropertyDialog extends JDialog {
 
 	private void initControl() {
 		cancelButton.addActionListener(l -> {
-			csvFile = null;
-			peptideQuantificationFile = null;
+			pepQuantFile = null;
+			pepQuantFileConfig = null;
 			setVisible(false);
 		});
 		//TODO on close event
 		nextButton.addActionListener(l -> {
 			if (index == 0) {
 				//TODO validation
-				csvFile = csvFilePropertyPanel.getModel();
-				if (peptideQuantificationFile == null) peptideQuantificationFile = new PeptideQuantificationFile();
+				pepQuantFile = pepQuantFilePropertyPanel.getModel();
+				if (pepQuantFileConfig == null) pepQuantFileConfig = new PepQuantFileConfiguration();
 //				try {
 					//TODO peptideQuantificationFile.setStringColumnNames(csvFile.getStringColumnNames());
 					//TODO peptideQuantificationFile.setNumberColumnNames(csvFile.getNumberColumnNames());
-					dataPropertyPanel.initSettings(peptideQuantificationFile);
+					dataPropertyPanel.initSettings(pepQuantFileConfig);
 					
 					cardLayout.show(propertyPanel, "File properties");
-					nextButton.setText("Ok");
 					index++;
 //				} catch (IOException e) {
 //					e.printStackTrace();
 //				}
 			} else if (index == 1) {
 				//TODO validation
-				peptideQuantificationFile = dataPropertyPanel.getSettings();
+				pepQuantFileConfig = dataPropertyPanel.getSettings();
+				cardLayout.show(propertyPanel, "Protein Quantification File");
+				nextButton.setText("Ok");
+				index++;
+			} else if (index == 2) {
+				//TODO validation
+				protQuantFile = protQuantFilePropertyPanel.getModel();
 				setVisible(false);
 			} 
 		});
 	}
 
-	public PeptideQuantificationFile getPeptideQuantificationFile() {
-		return peptideQuantificationFile;
+	public PepQuantFileConfiguration getPeptideQuantificationFile() {
+		return pepQuantFileConfig;
 	}
 	
-	public CSVFile getCSVFile() {
-		return csvFile;
+	public CSVFile getPepQuantFile() {
+		return pepQuantFile;
 	}
 	
-	public void setPeptideQuantificationFile(PeptideQuantificationFile peptideQuantificationFile) {
-		this.peptideQuantificationFile = peptideQuantificationFile;
+	public CSVFile petProtQuantFile() {
+		return protQuantFile;
+	}
+	
+	public void setPepQuantFileConfiguration(PepQuantFileConfiguration peptideQuantificationFile) {
+		this.pepQuantFileConfig = peptideQuantificationFile;
 		dataPropertyPanel.initSettings(peptideQuantificationFile);
 	}
 	
-	public void setCSVFile(CSVFile csvFile) {
-		this.csvFile = csvFile;
-		csvFilePropertyPanel.setModel(csvFile);
+	public void setPepQuantFile(CSVFile csvFile) {
+		this.pepQuantFile = csvFile;
+		pepQuantFilePropertyPanel.setModel(csvFile);
+	}
+
+	public void setProtQuantFile(CSVFile protQuantFile) {
+		this.protQuantFile = protQuantFile;
+		protQuantFilePropertyPanel.setModel(protQuantFile);
 	}
 }
