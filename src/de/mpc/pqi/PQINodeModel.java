@@ -74,7 +74,7 @@ public class PQINodeModel extends NodeModel {
     	Map<String, ProteinModel> quantifiedProteins = new HashMap<>();
     	Map<ProteinModel, Set<String>> map = new HashMap<>();
     	quantProteins.forEach(proteinData -> {
-    		String proteinGroupName = proteinData.getCell(0).toString();
+    		String proteinGroupName = proteinData.getKey().toString();
     		ProteinModel protein = new ProteinModel(proteinGroupName);
     		Set<String> set = new HashSet<>();
     		for (String proteinName : proteinGroupName.split("/")) {
