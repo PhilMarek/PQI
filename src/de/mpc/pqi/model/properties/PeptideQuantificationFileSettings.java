@@ -22,9 +22,9 @@ public class PeptideQuantificationFileSettings extends SettingsModel {
 	private static final String CFGKEY_RUN_NAME = "RUN_NAME_";
 	private static final String CFGKEY_RUN_COLUMN = "RUN_COLUMN_";
 	private String configName;
-	private PeptideQuantificationFile peptideQuantificationFile;
+	private PepQuantFileConfiguration peptideQuantificationFile;
 
-	public PeptideQuantificationFileSettings(String configName, PeptideQuantificationFile peptideQuantificationFile) {
+	public PeptideQuantificationFileSettings(String configName, PepQuantFileConfiguration peptideQuantificationFile) {
 		this.configName = configName;
 		this.peptideQuantificationFile = peptideQuantificationFile;
 	}
@@ -94,8 +94,8 @@ public class PeptideQuantificationFileSettings extends SettingsModel {
 		return getClass().getSimpleName();
 	}
 	
-	public static PeptideQuantificationFile read(NodeSettingsRO settings) {
-		PeptideQuantificationFile pqf = new PeptideQuantificationFile();
+	public static PepQuantFileConfiguration read(NodeSettingsRO settings) {
+		PepQuantFileConfiguration pqf = new PepQuantFileConfiguration();
 		
 		try {
 			pqf.setStringColumnNames(settings.getStringArray(CFGKEY_STRING_COLUMN_NAMES));
@@ -126,7 +126,7 @@ public class PeptideQuantificationFileSettings extends SettingsModel {
 		return pqf;
 	}
 	
-	public static void write(NodeSettingsWO settings, PeptideQuantificationFile pqf) {
+	public static void write(NodeSettingsWO settings, PepQuantFileConfiguration pqf) {
 		settings.addStringArray(CFGKEY_STRING_COLUMN_NAMES, pqf.getStringColumnNames());
 		settings.addIntArray(CFGKEY_STRING_COLUMN_INDIZES, pqf.getStringColumnIndizes());
 		settings.addStringArray(CFGKEY_NUMBER_COLUMN_NAMES, pqf.getNumberColumnNames());
@@ -148,7 +148,7 @@ public class PeptideQuantificationFileSettings extends SettingsModel {
 		}
 	}
 
-	public PeptideQuantificationFile getPeptideQuantificationFile() {
+	public PepQuantFileConfiguration getPeptideQuantificationFile() {
 		return peptideQuantificationFile;
 	}
 
