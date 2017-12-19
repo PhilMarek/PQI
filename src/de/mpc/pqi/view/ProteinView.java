@@ -12,8 +12,8 @@ import javax.swing.event.ListSelectionListener;
 
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.ProteinModel;
-import de.mpc.pqi.view.diagram.BoxPlotChart;
-import de.mpc.pqi.view.diagram.PQICategoryChart;
+import de.mpc.pqi.view.diagram.BoxPlot;
+import de.mpc.pqi.view.diagram.ProfileChart;
 import de.mpc.pqi.view.table.Table;
 import de.mpc.pqi.view.transform.AbundanceValueType;
 import de.mpc.pqi.view.tree.ProteinTree;
@@ -23,9 +23,9 @@ import de.mpc.pqi.view.tree.ProteinTreeModel;
 public class ProteinView extends JPanel {
 	private static final long serialVersionUID = -4267390339147137516L;
 	private ProteinTree tree;
-	private PQICategoryChart chart;
+	private ProfileChart chart;
 	private Table table;
-	private BoxPlotChart boxPlotChart;
+	private BoxPlot boxPlotChart;
 
 	private AbundanceValueType abundanceValueType = AbundanceValueType.ABUNDANCE;
 
@@ -37,9 +37,9 @@ public class ProteinView extends JPanel {
 
 	private void initGUI() {
 		tree = new ProteinTree();
-		chart = new PQICategoryChart();
+		chart = new ProfileChart();
 		table = new Table();
-		boxPlotChart = new BoxPlotChart();
+		boxPlotChart = new BoxPlot();
 	}
 
 	private void initLayout() {

@@ -17,11 +17,10 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.PeptideModel.State;
 import de.mpc.pqi.model.PeptideModel.State.Run;
-import de.mpc.pqi.view.transform.AbundanceValueType;
-import de.mpc.pqi.view.transform.TransformValueHelper;
 import de.mpc.pqi.model.ProteinModel;
+import de.mpc.pqi.view.transform.AbundanceValueType;
 
-public class PQICategoryChart {
+public class ProfileChart {
 
 	private CategoryPlot categoryPlot;
 	private NumberAxis rangeAxis1;
@@ -36,19 +35,9 @@ public class PQICategoryChart {
 		if (peptideModel != null) {
 			for (State state : peptideModel.getStates()) {
 				for (Run run : state.getRuns()) {
-
-					Double value = run.getAbundance();
-
-					if (valueType == AbundanceValueType.ABUNDANCE) {
-						result.addValue(TransformValueHelper.transformValue(value, valueType), peptideModel.getName(),
+					Double value = valueType.transformValue(run.getAbundance());
+					result.addValue(value, peptideModel.getName(),
 								state.getName() + " " + run.getName());
-					} else if (valueType == AbundanceValueType.LOG10) {
-						result.addValue(TransformValueHelper.transformValue(value, valueType), peptideModel.getName(),
-								state.getName() + " " + run.getName());
-					} else if (valueType == AbundanceValueType.ARCSIN) {
-						result.addValue(TransformValueHelper.transformValue(value, valueType), peptideModel.getName(),
-								state.getName() + " " + run.getName());
-					}
 				}
 			}
 		}
@@ -63,18 +52,9 @@ public class PQICategoryChart {
 				if (peptideModel != null) {
 					for (State state : peptideModel.getStates()) {
 						for (Run run : state.getRuns()) {
-
-							Double value = run.getAbundance();
-							if (valueType == AbundanceValueType.ABUNDANCE) {
-								result.addValue(TransformValueHelper.transformValue(value, valueType),
-										peptideModel.getName(), state.getName() + " " + run.getName());
-							} else if (valueType == AbundanceValueType.LOG10) {
-								result.addValue(TransformValueHelper.transformValue(value, valueType),
-										peptideModel.getName(), state.getName() + " " + run.getName());
-							} else if (valueType == AbundanceValueType.ARCSIN) {
-								result.addValue(TransformValueHelper.transformValue(value, valueType),
-										peptideModel.getName(), state.getName() + " " + run.getName());
-							}
+							Double value = valueType.transformValue(run.getAbundance());
+							result.addValue(value, peptideModel.getName(),
+										state.getName() + " " + run.getName());
 						}
 					}
 				}
@@ -90,18 +70,9 @@ public class PQICategoryChart {
 				if (peptideModel != null) {
 					for (State state : peptideModel.getStates()) {
 						for (Run run : state.getRuns()) {
-
-							Double value = run.getAbundance();
-							if (valueType == AbundanceValueType.ABUNDANCE) {
-								result.addValue(TransformValueHelper.transformValue(value, valueType),
-										peptideModel.getName(), state.getName() + " " + run.getName());
-							} else if (valueType == AbundanceValueType.LOG10) {
-								result.addValue(TransformValueHelper.transformValue(value, valueType),
-										peptideModel.getName(), state.getName() + " " + run.getName());
-							} else if (valueType == AbundanceValueType.ARCSIN) {
-								result.addValue(TransformValueHelper.transformValue(value, valueType),
-										peptideModel.getName(), state.getName() + " " + run.getName());
-							}
+							Double value = valueType.transformValue(run.getAbundance());
+							result.addValue(value, peptideModel.getName(),
+										state.getName() + " " + run.getName());
 						}
 					}
 				}

@@ -1,6 +1,5 @@
 package de.mpc.pqi.view.diagram;
 
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.PeptideModel.State;
 import de.mpc.pqi.model.PeptideModel.State.Run;
 
-public class BoxPlotChart {
+public class BoxPlot {
 
 	private CategoryPlot categoryPlot;
 

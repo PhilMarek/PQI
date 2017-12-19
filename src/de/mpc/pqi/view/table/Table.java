@@ -18,9 +18,8 @@ import org.quinto.swing.table.view.JBroTable;
 import de.mpc.pqi.model.PeptideModel;
 import de.mpc.pqi.model.PeptideModel.State;
 import de.mpc.pqi.model.PeptideModel.State.Run;
-import de.mpc.pqi.view.transform.AbundanceValueType;
-import de.mpc.pqi.view.transform.TransformValueHelper;
 import de.mpc.pqi.model.ProteinModel;
+import de.mpc.pqi.view.transform.AbundanceValueType;
 
 public class Table {
 
@@ -132,7 +131,7 @@ public class Table {
 			}
 		}
 
-		return TransformValueHelper.transformValues(values, valueType);
+		return valueType.transformValues(values);
 	}
 
 	public void addListSelectionListener(ListSelectionListener listener) {
