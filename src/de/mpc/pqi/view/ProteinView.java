@@ -43,18 +43,13 @@ public class ProteinView extends JPanel {
 	}
 
 	private void initLayout() {
-		// setLayout(new BorderLayout());
-		//
-		// add(tree, BorderLayout.WEST);
-		// add(chart.createChart(null), BorderLayout.CENTER);
-		// add(table.initTable(null), BorderLayout.SOUTH);
-
 		setLayout(new GridBagLayout());
-		GridBagHelper constraints = new GridBagHelper(new double[] { 0.1, 0.1 }, new double[] { 0.1, 0.5, 0.2 });
+		GridBagHelper constraints = new GridBagHelper(new double[] { 0.1, 0.1 }, new double[] { 0, 0.2, 0.1 });
 		add(tree, constraints.getConstraints(0, 0));
 		add(chart.createChart(null, abundanceValueType), constraints.getConstraints(1, 0));
-		add(table.initTable(null, abundanceValueType), constraints.getConstraints(0, 1, 3, 1));
 		add(boxPlotChart.getView(null), constraints.getConstraints(2, 0));
+
+		add(table.initTable(null, abundanceValueType), constraints.getConstraints(0, 1, 3, 1));
 	}
 
 	private void initControl() {
