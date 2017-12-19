@@ -8,20 +8,26 @@ public enum AbundanceValueType {
 	
 	ABUNDANCE(value -> {
 		return value;
-	}), 
+	}, "Abundance"), 
 	LOG10(value -> {
 		Double v = new Double(value);
 		return v.isInfinite() || v.isNaN() || value == 0.0 ? -1. : Math.log10(value);
-	}), 
+	}, "log10(abundance)"), 
 	ARCSIN(value -> {
 		Double result = Math.asin(value);
 		return result.isNaN() ? -1. : result;
-	});
+	}, "arcsinh(abundance)");
 	
 	private DoubleUnaryOperator operator;
+	private String caption;
 
-	private AbundanceValueType(DoubleUnaryOperator operator) {
+	private AbundanceValueType(DoubleUnaryOperator operator, String caption) {
 		this.operator = operator;
+		this.caption = caption;
+	}
+	
+	public String getCaption() {
+		return caption;
 	}
 	
 	public Double transformValue(Double value){

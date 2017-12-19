@@ -100,16 +100,8 @@ public class ProfileChart {
 		this.valueType = valueType;
 		this.lastData = peptideModel;
 		final CategoryDataset dataset1 = createDataset(peptideModel);
-		this.rangeAxis1 = new NumberAxis("Abundance");
+		this.rangeAxis1 = new NumberAxis(valueType.getCaption());
 		this.rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
-		if (valueType == AbundanceValueType.ABUNDANCE) {
-			this.rangeAxis1.setLabel("Abundance");
-		} else if (valueType == AbundanceValueType.LOG10) {
-			this.rangeAxis1.setLabel("log10(abundance)");
-		} else if (valueType == AbundanceValueType.ARCSIN) {
-			this.rangeAxis1.setLabel("arcsin(abundance)");
-		}
 
 		final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
 		renderer1.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
@@ -130,15 +122,7 @@ public class ProfileChart {
 
 	public void updateValueType(AbundanceValueType valueType) {
 		this.valueType = valueType;
-
-		if (valueType == AbundanceValueType.ABUNDANCE) {
-			this.rangeAxis1.setLabel("Abundance");
-		} else if (valueType == AbundanceValueType.LOG10) {
-			this.rangeAxis1.setLabel("log10(abundance)");
-		} else if (valueType == AbundanceValueType.ARCSIN) {
-			this.rangeAxis1.setLabel("arcsin(abundance)");
-		}
-		
+		this.rangeAxis1.setLabel(valueType.getCaption());
 		updateChartData(lastData);
 	}
 }
