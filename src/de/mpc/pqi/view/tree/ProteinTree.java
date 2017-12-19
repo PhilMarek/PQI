@@ -63,7 +63,7 @@ public class ProteinTree extends JPanel {
 	private ButtonGroup abundanceValueButtonGroup;
 
 	/** Maps a filter function to every JRadioButton choice */
-	private static final Map<String, Function<PQIModel, Boolean>> m_filterActionMap = new HashMap<>();
+	private static final Map<String, Function<PQIModel, Boolean>> filterActionMap = new HashMap<>();
 	/** Static final string for "Contains"-Radiobutton */
 	private static final String CONTAINS = "Contains";
 	/** Static final string for "Prefix"-Radiobutton */
@@ -74,39 +74,39 @@ public class ProteinTree extends JPanel {
 	private static final String PEPTIDE = "Peptid";
 
 	/** Label for the filter textfield */
-	private JLabel m_filterLabel;
+	private JLabel filterLabel;
 	/** Textfield for filtering the tree */
-	private JTextField m_filterTextField;
+	private JTextField filterTextField;
 
-	private JLabel m_filterCategoryLabel;
-	private JRadioButton m_proteinRadioButton;
-	private JRadioButton m_peptideRadioButton;
-	private ButtonGroup m_filterCategoryGroup;
+	private JLabel filterCategoryLabel;
+	private JRadioButton proteinRadioButton;
+	private JRadioButton peptideRadioButton;
+	private ButtonGroup filterCategoryGroup;
 
-	private JLabel m_filterMethodLabel;
+	private JLabel filterMethodLabel;
 	/** Radiobutton which activates the "contains"-filter */
-	private JRadioButton m_containsRadioButton;
+	private JRadioButton containsRadioButton;
 	/** Radiobutton which activates the "prefix"-filter */
-	private JRadioButton m_prefixRadioButton;
+	private JRadioButton prefixRadioButton;
 	/**
 	 * ButtonGroup which manages selection of the radiobuttons for choosing the
 	 * filter method
 	 */
-	private ButtonGroup m_filterMethodGroup;
+	private ButtonGroup filterMethodGroup;
 
 	/** Tree for displaying the protein/peptide data */
-	private JTree m_tree;
+	private JTree tree;
 	/** Corresponding model for the tree */
-	private ProteinTreeModel m_model;
+	private ProteinTreeModel model;
 	/** Corresponding selection model for the tree */
-	private TreeSelectionModel m_selectionModel;
+	private TreeSelectionModel selectionModel;
 	/** Scrollpane for the tree */
-	private JScrollPane m_scrollPane;
+	private JScrollPane scrollPane;
 
 	/** Button which collapses all nodes on action */
-	private JButton m_collapse;
+	private JButton collapse;
 	/** Button which expands all nodes on action */
-	private JButton m_expand;
+	private JButton expand;
 
 	/**
 	 * Constructor. Initializes the gui, its layout and the controls.
@@ -117,11 +117,11 @@ public class ProteinTree extends JPanel {
 	public ProteinTree() {
 		initGUI();
 
-		m_filterActionMap.put(CONTAINS, data -> {
-			return data.getName().trim().toLowerCase().contains(m_filterTextField.getText().trim().toLowerCase());
+		filterActionMap.put(CONTAINS, data -> {
+			return data.getName().trim().toLowerCase().contains(filterTextField.getText().trim().toLowerCase());
 		});
-		m_filterActionMap.put(PREFIX, data -> {
-			return data.getName().trim().toLowerCase().startsWith(m_filterTextField.getText().trim().toLowerCase());
+		filterActionMap.put(PREFIX, data -> {
+			return data.getName().trim().toLowerCase().startsWith(filterTextField.getText().trim().toLowerCase());
 		});
 
 		initLayout();
@@ -132,24 +132,24 @@ public class ProteinTree extends JPanel {
 	 * Initializes gui components.
 	 */
 	private void initGUI() {
-		m_filterLabel = new JLabel("Filter");
-		m_filterTextField = new JTextField();
+		filterLabel = new JLabel("Filter");
+		filterTextField = new JTextField();
 
-		m_filterCategoryLabel = new JLabel("Category:");
-		m_proteinRadioButton = new JRadioButton(PROTEIN);
-		m_peptideRadioButton = new JRadioButton(PEPTIDE);
-		m_filterCategoryGroup = new ButtonGroup();
-		m_filterCategoryGroup.add(m_proteinRadioButton);
-		m_filterCategoryGroup.add(m_peptideRadioButton);
-		m_filterCategoryGroup.setSelected(m_proteinRadioButton.getModel(), true);
+		filterCategoryLabel = new JLabel("Category:");
+		proteinRadioButton = new JRadioButton(PROTEIN);
+		peptideRadioButton = new JRadioButton(PEPTIDE);
+		filterCategoryGroup = new ButtonGroup();
+		filterCategoryGroup.add(proteinRadioButton);
+		filterCategoryGroup.add(peptideRadioButton);
+		filterCategoryGroup.setSelected(proteinRadioButton.getModel(), true);
 
-		m_filterMethodLabel = new JLabel("Method:");
-		m_containsRadioButton = new JRadioButton(CONTAINS);
-		m_prefixRadioButton = new JRadioButton(PREFIX);
-		m_filterMethodGroup = new ButtonGroup();
-		m_filterMethodGroup.add(m_containsRadioButton);
-		m_filterMethodGroup.add(m_prefixRadioButton);
-		m_filterMethodGroup.setSelected(m_containsRadioButton.getModel(), true);
+		filterMethodLabel = new JLabel("Method:");
+		containsRadioButton = new JRadioButton(CONTAINS);
+		prefixRadioButton = new JRadioButton(PREFIX);
+		filterMethodGroup = new ButtonGroup();
+		filterMethodGroup.add(containsRadioButton);
+		filterMethodGroup.add(prefixRadioButton);
+		filterMethodGroup.setSelected(containsRadioButton.getModel(), true);
 
 		abundanceValueType = new JLabel("Show Value as:");
 		abundanceValueButton = new JRadioButton(ABUNDANCE);
@@ -161,14 +161,14 @@ public class ProteinTree extends JPanel {
 		abundanceValueButtonGroup.add(arcsinValueButton);
 		abundanceValueButtonGroup.setSelected(abundanceValueButton.getModel(), true);
 
-		m_selectionModel = new DefaultTreeSelectionModel();
-		m_selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		m_tree = new JTree(new ProteinTreeModel(null));
-		m_tree.setSelectionModel(m_selectionModel);
-		m_scrollPane = new JScrollPane(m_tree);
+		selectionModel = new DefaultTreeSelectionModel();
+		selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree = new JTree(new ProteinTreeModel(null));
+		tree.setSelectionModel(selectionModel);
+		scrollPane = new JScrollPane(tree);
 
-		m_collapse = new JButton("Collapse");
-		m_expand = new JButton("Expand");
+		collapse = new JButton("Collapse");
+		expand = new JButton("Expand");
 	}
 
 	/**
@@ -178,34 +178,34 @@ public class ProteinTree extends JPanel {
 		setLayout(new GridBagLayout());
 
 		GridBagHelper constraints = new GridBagHelper(new double[] { 0, 0, 0, 0, 0.1, 0 },
-				new double[] { 0, 0, 0, 0.1 });
-		add(m_filterLabel, constraints.getConstraints(0, 0));
-		add(m_filterTextField, constraints.getConstraints(1, 0, 2, 1));
+				new double[] { 0, 0, 0, 0 });
+		add(filterLabel, constraints.getConstraints(0, 0));
+		add(filterTextField, constraints.getConstraints(1, 0, 3, 1));
 
-		add(m_filterCategoryLabel, constraints.getConstraints(0, 1));
-		add(m_proteinRadioButton, constraints.getConstraints(1, 1));
-		add(m_peptideRadioButton, constraints.getConstraints(2, 1));
+		add(filterCategoryLabel, constraints.getConstraints(0, 1));
+		add(proteinRadioButton, constraints.getConstraints(1, 1));
+		add(peptideRadioButton, constraints.getConstraints(2, 1));
 
-		add(m_filterMethodLabel, constraints.getConstraints(0, 2));
-		add(m_containsRadioButton, constraints.getConstraints(1, 2));
-		add(m_prefixRadioButton, constraints.getConstraints(2, 2));
+		add(filterMethodLabel, constraints.getConstraints(0, 2));
+		add(containsRadioButton, constraints.getConstraints(1, 2));
+		add(prefixRadioButton, constraints.getConstraints(2, 2));
 
 		add(abundanceValueType, constraints.getConstraints(0, 3));
 		add(abundanceValueButton, constraints.getConstraints(1, 3));
 		add(log10ValueButton, constraints.getConstraints(2, 3));
 		add(arcsinValueButton, constraints.getConstraints(3, 3));
 
-		add(m_scrollPane, constraints.getConstraints(0, 4, 3, 1));
+		add(scrollPane, constraints.getConstraints(0, 4, 4, 1));
 
-		add(m_collapse, constraints.getConstraints(0, 5));
-		add(m_expand, constraints.getConstraints(1, 5));
+		add(collapse, constraints.getConstraints(0, 5));
+		add(expand, constraints.getConstraints(1, 5));
 	}
 
 	/**
 	 * Registers controls and listeners for the gui components.
 	 */
 	private void initControl() {
-		m_filterTextField.getDocument().addDocumentListener(new DocumentListener() {
+		filterTextField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
 				onChange();
@@ -227,12 +227,12 @@ public class ProteinTree extends JPanel {
 		});
 
 		// If any radio button selection is changed, just call updateComponent
-		m_proteinRadioButton.addActionListener(e -> updateComponent());
-		m_peptideRadioButton.addActionListener(e -> updateComponent());
-		m_containsRadioButton.addActionListener(e -> updateComponent());
-		m_prefixRadioButton.addActionListener(e -> updateComponent());
+		proteinRadioButton.addActionListener(e -> updateComponent());
+		peptideRadioButton.addActionListener(e -> updateComponent());
+		containsRadioButton.addActionListener(e -> updateComponent());
+		prefixRadioButton.addActionListener(e -> updateComponent());
 
-		m_selectionModel.addTreeSelectionListener(treePath -> {
+		selectionModel.addTreeSelectionListener(treePath -> {
 			TreePath newSelectionPath = treePath.getNewLeadSelectionPath();
 			Object selection = newSelectionPath != null
 					&& !ProteinTreeModel.ROOT.equals(newSelectionPath.getLastPathComponent())
@@ -241,14 +241,14 @@ public class ProteinTree extends JPanel {
 				selectionListeners.forEach(listener -> listener.selectionChanged(selection));
 		});
 
-		m_collapse.addActionListener(e -> {
-			for (int i = 1; i < m_tree.getRowCount(); i++)
-				m_tree.collapseRow(i);
+		collapse.addActionListener(e -> {
+			for (int i = 1; i < tree.getRowCount(); i++)
+				tree.collapseRow(i);
 		});
 
-		m_expand.addActionListener(e -> {
-			for (int i = 0; i < m_tree.getRowCount(); i++)
-				m_tree.expandRow(i);
+		expand.addActionListener(e -> {
+			for (int i = 0; i < tree.getRowCount(); i++)
+				tree.expandRow(i);
 		});
 		
 		abundanceValueButton.setActionCommand("abundance");
@@ -262,7 +262,7 @@ public class ProteinTree extends JPanel {
 	 * @param treeModel
 	 */
 	public void setModel(ProteinTreeModel treeModel) {
-		m_model = treeModel;
+		model = treeModel;
 		updateComponent();
 	}
 
@@ -271,12 +271,12 @@ public class ProteinTree extends JPanel {
 	 */
 	public void updateComponent() {
 		String filter = null;
-		if (m_containsRadioButton.isSelected())
+		if (containsRadioButton.isSelected())
 			filter = CONTAINS;
-		else if (m_prefixRadioButton.isSelected())
+		else if (prefixRadioButton.isSelected())
 			filter = PREFIX;
-		boolean filterForProteins = m_proteinRadioButton.isSelected();
-		m_tree.setModel(m_model.getFilteredModel(m_filterTextField.getText(), m_filterActionMap.get(filter),
+		boolean filterForProteins = proteinRadioButton.isSelected();
+		tree.setModel(model.getFilteredModel(filterTextField.getText(), filterActionMap.get(filter),
 				filterForProteins));
 	}
 

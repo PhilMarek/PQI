@@ -34,7 +34,7 @@ public class ProteinTreeModel implements TreeModel {
 		}
 	};
 	
-	/** Contains all show protein and the underlying shown peptides */
+	/** Contains all shown proteins and the underlying shown peptides **/
 	private List<ProteinModel> proteinData;
 	
 	/**
@@ -79,7 +79,7 @@ public class ProteinTreeModel implements TreeModel {
 	 */
 	@Override
 	public void addTreeModelListener(TreeModelListener arg0) {
-
+		//TODO
 	}
 
 	/**
