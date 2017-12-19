@@ -25,10 +25,11 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="In-Port name">Description of first input port...</inPort>
-        <!-- possibly more input ports here-->
+        <inPort index="0" name="Peptide Quantification File">CSV File which contains the peptide quantification</inPort>
+        <inPort index="1" name="Protein Quantification File">CSV File which contains the protein quantification</inPort>
+        <inPort index="2" name="Protein Identification File">FASTA File which contains protein identification information</inPort>
+        
         <outPort index="0" name="Out-Port name">Description of first output port...</outPort>
-        <!-- possibly more output ports here-->
     </ports>    
     <views>
         <view index="0" name="name of first view">Description of first view...</view>
