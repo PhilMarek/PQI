@@ -12,7 +12,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 
-import de.mpc.pqi.model.properties.PeptideQuantificationFile;
+import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
 import de.mpc.pqi.model.properties.PeptideQuantificationFileSettings;
 import de.mpc.pqi.view.properties.DataPropertyPanel;
 
@@ -43,7 +43,7 @@ public class PQINodeDialog extends NodeDialogPane {
     
     @Override
     protected void loadSettingsFrom(NodeSettingsRO settings, DataTableSpec[] specs) throws NotConfigurableException {
-    	PeptideQuantificationFile pqf = PeptideQuantificationFileSettings.read(settings);
+    	PepQuantFileConfiguration pqf = PeptideQuantificationFileSettings.read(settings);
     	if (pqf.getStringColumnNames() == null || pqf.getStringColumnNames().length == 0 ||
     		pqf.getNumberColumnNames() == null || pqf.getNumberColumnNames().length == 0) {
     		
