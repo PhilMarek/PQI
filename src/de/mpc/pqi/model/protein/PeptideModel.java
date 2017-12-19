@@ -52,6 +52,7 @@ public class PeptideModel extends PQIModel {
 	private boolean activated = true;
 	private List<State> states;
 	private boolean unique;
+	private boolean selected = true;
 	
 	public PeptideModel(String name, List<State> states) {
 		this.name = name;
@@ -89,5 +90,13 @@ public class PeptideModel extends PQIModel {
 
 	public void setUnique(boolean unique) {
 		this.unique = unique;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }
