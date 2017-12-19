@@ -11,10 +11,7 @@ Bundle-ClassPath: pqi.jar,
  lib/JBroTable-1.1.3.jar,
  lib/log4j-1.2.17.jar
 Bundle-Activator: de.mpc.pqi.PQINodePlugin
-Export-Package: de.mpc.pqi,
- de.mpc.pqi.model,
- de.mpc.pqi.view,
- de.mpc.pqi.view.tree
+Export-Package: de.mpc.pqi
 Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.core,
  org.knime.workbench.repository,

@@ -19,14 +19,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import de.mpc.pqi.model.PeptideModel;
-import de.mpc.pqi.model.PeptideModel.State;
-import de.mpc.pqi.model.PeptideModel.State.Run;
-import de.mpc.pqi.model.ProteinModel;
 import de.mpc.pqi.model.properties.CSVFile;
 import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
+import de.mpc.pqi.model.protein.PeptideModel.State;
+import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 import de.mpc.pqi.view.ProteinView;
 import de.mpc.pqi.view.properties.PropertyDialog;
 

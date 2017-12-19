@@ -1,4 +1,4 @@
-package de.mpc.pqi.view.table;
+package de.mpc.pqi.view.protein;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -15,13 +15,12 @@ import org.quinto.swing.table.model.ModelFieldGroup;
 import org.quinto.swing.table.model.ModelRow;
 import org.quinto.swing.table.view.JBroTable;
 
-import de.mpc.pqi.model.PeptideModel;
-import de.mpc.pqi.model.PeptideModel.State;
-import de.mpc.pqi.model.PeptideModel.State.Run;
-import de.mpc.pqi.model.ProteinModel;
-import de.mpc.pqi.view.transform.AbundanceValueType;
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
+import de.mpc.pqi.model.protein.PeptideModel.State;
+import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 
-public class Table {
+public class PeptideTable {
 
 	private JBroTable table;
 

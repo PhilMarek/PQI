@@ -1,4 +1,4 @@
-package de.mpc.pqi.view.diagram;
+package de.mpc.pqi.view.protein;
 
 import java.util.List;
 
@@ -14,11 +14,10 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import de.mpc.pqi.model.PeptideModel;
-import de.mpc.pqi.model.PeptideModel.State;
-import de.mpc.pqi.model.PeptideModel.State.Run;
-import de.mpc.pqi.model.ProteinModel;
-import de.mpc.pqi.view.transform.AbundanceValueType;
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
+import de.mpc.pqi.model.protein.PeptideModel.State;
+import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 
 public class ProfileChart {
 

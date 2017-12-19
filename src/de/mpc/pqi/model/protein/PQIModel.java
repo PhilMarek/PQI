@@ -1,4 +1,4 @@
-package de.mpc.pqi.model;
+package de.mpc.pqi.model.protein;
 
 /**
  * Abstract model for input data and visualization in trees and diagrams.

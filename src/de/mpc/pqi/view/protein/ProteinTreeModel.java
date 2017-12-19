@@ -1,4 +1,4 @@
-package de.mpc.pqi.view.tree;
+package de.mpc.pqi.view.protein;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import de.mpc.pqi.model.PQIModel;
-import de.mpc.pqi.model.PeptideModel;
-import de.mpc.pqi.model.ProteinModel;
+import de.mpc.pqi.model.protein.PQIModel;
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
 
 /**
  * 

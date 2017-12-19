@@ -1,4 +1,4 @@
-package de.mpc.pqi.view.tree;
+package de.mpc.pqi.view.protein;
 
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
@@ -22,7 +22,7 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.mpc.pqi.model.PQIModel;
+import de.mpc.pqi.model.protein.PQIModel;
 import de.mpc.pqi.view.GridBagHelper;
 
 /**

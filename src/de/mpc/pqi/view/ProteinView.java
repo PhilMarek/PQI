@@ -10,21 +10,21 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.mpc.pqi.model.PeptideModel;
-import de.mpc.pqi.model.ProteinModel;
-import de.mpc.pqi.view.diagram.BoxPlot;
-import de.mpc.pqi.view.diagram.ProfileChart;
-import de.mpc.pqi.view.table.Table;
-import de.mpc.pqi.view.transform.AbundanceValueType;
-import de.mpc.pqi.view.tree.ProteinTree;
-import de.mpc.pqi.view.tree.ProteinTree.ProteinTreeSelectionListener;
-import de.mpc.pqi.view.tree.ProteinTreeModel;
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
+import de.mpc.pqi.view.protein.AbundanceValueType;
+import de.mpc.pqi.view.protein.BoxPlot;
+import de.mpc.pqi.view.protein.ProfileChart;
+import de.mpc.pqi.view.protein.ProteinTree;
+import de.mpc.pqi.view.protein.ProteinTreeModel;
+import de.mpc.pqi.view.protein.PeptideTable;
+import de.mpc.pqi.view.protein.ProteinTree.ProteinTreeSelectionListener;
 
 public class ProteinView extends JPanel {
 	private static final long serialVersionUID = -4267390339147137516L;
 	private ProteinTree tree;
 	private ProfileChart chart;
-	private Table table;
+	private PeptideTable table;
 	private BoxPlot boxPlotChart;
 
 	private AbundanceValueType abundanceValueType = AbundanceValueType.ABUNDANCE;
@@ -38,7 +38,7 @@ public class ProteinView extends JPanel {
 	private void initGUI() {
 		tree = new ProteinTree();
 		chart = new ProfileChart();
-		table = new Table();
+		table = new PeptideTable();
 		boxPlotChart = new BoxPlot();
 	}
 

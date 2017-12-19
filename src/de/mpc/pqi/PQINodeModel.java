@@ -23,14 +23,14 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.port.PortType;
 
-import de.mpc.pqi.model.PeptideModel;
-import de.mpc.pqi.model.PeptideModel.State;
-import de.mpc.pqi.model.PeptideModel.State.Run;
-import de.mpc.pqi.model.ProteinModel;
 import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
 import de.mpc.pqi.model.properties.PeptideQuantificationFileSettings;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
+import de.mpc.pqi.model.protein.PeptideModel.State;
+import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 
 
 /**

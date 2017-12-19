@@ -1,4 +1,4 @@
-package de.mpc.pqi.model;
+package de.mpc.pqi.model.protein;
 
 import java.util.List;
 

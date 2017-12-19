@@ -1,4 +1,4 @@
-package de.mpc.pqi.view.transform;
+package de.mpc.pqi.view.protein;
 
 import java.util.ArrayList;
 import java.util.List;
