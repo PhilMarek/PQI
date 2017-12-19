@@ -127,5 +127,4 @@ public class CSVFilePropertyPanel extends JPanel {
 		hasColumnHeaderCheckBox.setSelected(csvFile.getHasColumnHeader());
 		hasRowHeaderCheckBox.setSelected(csvFile.getHasRowHeader());
 	}
-	
 }

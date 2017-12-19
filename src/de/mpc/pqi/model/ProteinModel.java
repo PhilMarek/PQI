@@ -1,7 +1,9 @@
 package de.mpc.pqi.model;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Specialization of PQIModel. Stores information for protein, e.g. the protein name and the found peptides for this protein.
@@ -13,7 +15,7 @@ public class ProteinModel extends PQIModel {
 	/** The protein name */
 	private String name;
 	/** Found peptides for this protein */
-	private List<PeptideModel> peptides;
+	private Set<PeptideModel> peptides;
 
 	/**
 	 * Constructor.
@@ -21,7 +23,7 @@ public class ProteinModel extends PQIModel {
 	 */
 	public ProteinModel(String name) {
 		this.name = name;
-		this.peptides = new ArrayList<>();
+		this.peptides = new HashSet<>();
 	}
 	
 	/**
@@ -37,7 +39,7 @@ public class ProteinModel extends PQIModel {
 	 * @return
 	 */
 	public List<PeptideModel> getPeptides() {
-		return peptides;
+		return peptides.stream().collect(Collectors.toList());
 	}
 	
 	/**
