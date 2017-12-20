@@ -7,18 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.mpc.pqi.aggregation.AggregationView;
 import de.mpc.pqi.model.protein.PeptideModel;
 import de.mpc.pqi.model.protein.ProteinModel;
 import de.mpc.pqi.view.protein.AbundanceValueType;
 import de.mpc.pqi.view.protein.BoxPlot;
+import de.mpc.pqi.view.protein.PeptideTable;
 import de.mpc.pqi.view.protein.ProfileChart;
 import de.mpc.pqi.view.protein.ProteinTree;
-import de.mpc.pqi.view.protein.ProteinTreeModel;
-import de.mpc.pqi.view.protein.PeptideTable;
 import de.mpc.pqi.view.protein.ProteinTree.ProteinTreeSelectionListener;
+import de.mpc.pqi.view.protein.ProteinTreeModel;
 
 public class ProteinView extends JPanel {
 	private static final long serialVersionUID = -4267390339147137516L;
@@ -26,6 +28,7 @@ public class ProteinView extends JPanel {
 	private ProfileChart chart;
 	private PeptideTable table;
 	private BoxPlot boxPlotChart;
+	private AggregationView aggregationView;
 
 	private AbundanceValueType abundanceValueType = AbundanceValueType.ABUNDANCE;
 
@@ -40,6 +43,7 @@ public class ProteinView extends JPanel {
 		chart = new ProfileChart();
 		table = new PeptideTable();
 		boxPlotChart = new BoxPlot();
+		aggregationView = new AggregationView();
 	}
 
 	private void initLayout() {
@@ -49,7 +53,10 @@ public class ProteinView extends JPanel {
 		add(chart.createChart(null, abundanceValueType), constraints.getConstraints(1, 0));
 		add(boxPlotChart.getView(null), constraints.getConstraints(2, 0));
 
-		add(table.initTable(null, abundanceValueType), constraints.getConstraints(0, 1, 3, 1));
+		JTabbedPane tabPane = new JTabbedPane();
+		tabPane.add("Details", table.initTable(null, abundanceValueType));
+		tabPane.add("Aggregation", aggregationView);
+		add(tabPane, constraints.getConstraints(0, 1, 3, 1));
 	}
 
 	private void initControl() {
@@ -63,6 +70,7 @@ public class ProteinView extends JPanel {
 					ProteinModel proteinModel = (ProteinModel) selection;
 					chart.updateChartData(proteinModel);
 					table.setData(proteinModel, abundanceValueType);
+					aggregationView.update(proteinModel);
 				}
 			}
 		});
