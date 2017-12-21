@@ -3,6 +3,7 @@ package de.mpc.pqi.aggregation;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.InputMap;
 import javax.swing.JScrollPane;
@@ -40,24 +41,18 @@ public class AggregationTabel extends JScrollPane {
 
 		this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		this.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
+		this.table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					return;
-				}
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				if (table.getModel() instanceof AggregationTableModel) {
 					AggregationTableModel model = (AggregationTableModel) table.getModel();
-					int index = table.getSelectionModel().getLeadSelectionIndex();
-					if (index != -1) {
-						model.rowSelect(table.getSelectionModel().getLeadSelectionIndex());
+					int row = table.rowAtPoint(evt.getPoint());
+					if (row >= 0) {
+						model.rowSelect(row);
 
 						table.repaint();
 					}
-
 				}
-
 			}
 		});
 

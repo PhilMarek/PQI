@@ -14,8 +14,7 @@ public enum AbundanceValueType {
 		return v.isInfinite() || v.isNaN() || value == 0.0 ? -1. : Math.log10(value);
 	}, "log10(abundance)"), 
 	ARCSIN(value -> {
-		Double result = Math.asin(value);
-		return result.isNaN() ? -1. : result;
+		return Math.log(value + Math.sqrt(value*value + 1.0));
 	}, "arcsinh(abundance)");
 	
 	private DoubleUnaryOperator operator;
