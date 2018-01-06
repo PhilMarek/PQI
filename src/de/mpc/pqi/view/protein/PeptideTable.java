@@ -1,12 +1,16 @@
 package de.mpc.pqi.view.protein;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import org.quinto.swing.table.model.IModelFieldGroup;
 import org.quinto.swing.table.model.ModelData;
@@ -55,6 +59,27 @@ public class PeptideTable {
 			this.proteinModel = proteinModel;
 			setData(proteinModel, this.valueType);
 		}
+		
+		this.table.setDefaultRenderer(Object.class, new TableCellRenderer() {
+			private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+						column);
+				if (row % 2 == 0) {
+					c.setBackground(Color.WHITE);
+				} else {
+					c.setBackground(Color.LIGHT_GRAY);
+				}
+				return c;
+			}
+
+		});
+		
+//		this.table.setAutoCreateRowSorter(true);
+		
 		return this.table.getScrollPane();
 	}
 

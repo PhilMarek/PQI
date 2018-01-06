@@ -32,8 +32,8 @@ public class AggregationTableModel extends AbstractTableModel {
 
 			rowData.add(peptideModel.getName());
 			for (State state : peptideModel.getStates()) {
-				rowData.add(state.getMean());
-				rowData.add(peptideModel.getRatioOfMeans(state.getName(), reference));
+				rowData.add(Math.round(state.getMean()*100.0)/100.0);
+				rowData.add(Math.round(peptideModel.getRatioOfMeans(state.getName(), reference) * 100.0) / 100.0);
 			}
 			rowData.add(peptideModel.isUnique());
 			rowData.add(peptideModel.isSelected());

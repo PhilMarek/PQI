@@ -10,8 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
@@ -75,6 +73,8 @@ public class AggregationTabel extends JScrollPane {
 			}
 
 		});
+		
+//		this.table.setAutoCreateRowSorter(true);
 
 		getViewport().add(this.table);
 	}

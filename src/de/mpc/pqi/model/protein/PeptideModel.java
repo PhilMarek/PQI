@@ -17,7 +17,7 @@ public class PeptideModel extends PQIModel {
 
 			public Run(String name, double abundance) {
 				this.name = name;
-				this.abundance = Math.round(abundance * 100.0) / 100.0;
+				this.abundance = abundance;
 			}
 
 			public String getName() {
@@ -134,11 +134,13 @@ public class PeptideModel extends PQIModel {
 			if (a == b) {
 				return 1.0;
 			} else {
-				if (a > b) {
-					return Math.round((a / b) * 100.0) / 100.0;
-				} else {
-					return Math.round((b / a) * 100.0) / 100.0;
-				}
+				// if (a > b) {
+				// return Math.round((a / b) * 100.0) / 100.0;
+				// } else {
+				// return Math.round((b / a) * 100.0) / 100.0;
+				// }
+
+				return Math.round((a / b) * 100.0) / 100.0;
 			}
 		}
 		return 0.0;
