@@ -27,7 +27,7 @@ public class ProteinView extends JPanel {
 	private ProteinTree tree;
 	private ProfileChart chart;
 	private PeptideTable table;
-	private BoxPlot boxPlotChart;
+	private BoxPlot boxPlot;
 	private AggregationView aggregationView;
 
 	private AbundanceValueType abundanceValueType = AbundanceValueType.ABUNDANCE;
@@ -42,7 +42,7 @@ public class ProteinView extends JPanel {
 		tree = new ProteinTree();
 		chart = new ProfileChart();
 		table = new PeptideTable();
-		boxPlotChart = new BoxPlot();
+		boxPlot = new BoxPlot();
 		aggregationView = new AggregationView();
 	}
 
@@ -51,7 +51,7 @@ public class ProteinView extends JPanel {
 		GridBagHelper constraints = new GridBagHelper(new double[] { 0.1, 0.1 }, new double[] { 0, 0.2, 0.1 });
 		add(tree, constraints.getConstraints(0, 0));
 		add(chart.createChart(null, abundanceValueType), constraints.getConstraints(1, 0));
-		add(boxPlotChart.getView(null), constraints.getConstraints(2, 0));
+		add(boxPlot, constraints.getConstraints(2, 0));
 
 		JTabbedPane tabPane = new JTabbedPane();
 		tabPane.add("Details", table.initTable(null, abundanceValueType));
@@ -64,22 +64,20 @@ public class ProteinView extends JPanel {
 			@Override
 			public void selectionChanged(Object selection) {
 				if (selection instanceof PeptideModel) {
-					PeptideModel peptideModel = (PeptideModel) selection;
-					chart.updateChartData(peptideModel);
+				//	PeptideModel peptideModel = (PeptideModel) selection;
+				//	chart.updateChartData(peptideModel);
 				} else if (selection instanceof ProteinModel) {
 					ProteinModel proteinModel = (ProteinModel) selection;
 					chart.updateChartData(proteinModel);
 					table.setData(proteinModel, abundanceValueType);
-					aggregationView.update(proteinModel);
+					aggregationView.setModel(proteinModel);
 				}
 			}
 		});
 
 		table.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-
 				if (!e.getValueIsAdjusting()) {
 					List<PeptideModel> peptideModels = new ArrayList<>();
 
@@ -92,27 +90,28 @@ public class ProteinView extends JPanel {
 					}
 					if (!peptideModels.isEmpty()) {
 						chart.updateChartData(peptideModels);
-						boxPlotChart.update(peptideModels.get(0));
+						boxPlot.setModel(peptideModels.get(0));
+					} else {
+						//TODO deselect charts
 					}
-
 				}
 			}
 		});
 
 		tree.addAbundanceValueButtonListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equalsIgnoreCase("abundance")) {
 					abundanceValueType = AbundanceValueType.ABUNDANCE;
 				} else if (e.getActionCommand().equalsIgnoreCase("log10")) {
 					abundanceValueType = AbundanceValueType.LOG10;
-				} else if (e.getActionCommand().equalsIgnoreCase("arcsin")) {
-					abundanceValueType = AbundanceValueType.ARCSIN;
+				} else if (e.getActionCommand().equalsIgnoreCase("arcsinh")) {
+					abundanceValueType = AbundanceValueType.ARCSINH;
 				}
 
 				table.updateValueType(abundanceValueType);
 				chart.updateValueType(abundanceValueType);
+				boxPlot.setValueType(abundanceValueType);
 			}
 		});
 	}
