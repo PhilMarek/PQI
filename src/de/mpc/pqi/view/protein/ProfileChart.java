@@ -22,7 +22,7 @@ import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 public class ProfileChart {
 
 	private CategoryPlot categoryPlot;
-	private NumberAxis rangeAxis1;
+	private NumberAxis xAxis;
 
 	private AbundanceValueType valueType;
 
@@ -100,18 +100,18 @@ public class ProfileChart {
 		this.valueType = valueType;
 		this.lastData = peptideModel;
 		final CategoryDataset dataset1 = createDataset(peptideModel);
-		this.rangeAxis1 = new NumberAxis(valueType.getCaption());
-		this.rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		this.xAxis = new NumberAxis(valueType.getCaption());
+		this.xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
 		final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
 		renderer1.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
 
-		this.categoryPlot = new CategoryPlot(dataset1, null, rangeAxis1, renderer1);
+		this.categoryPlot = new CategoryPlot(dataset1, null, xAxis, renderer1);
 		this.categoryPlot.setDomainGridlinesVisible(true);
 
-		final CategoryAxis domainAxis = new CategoryAxis("Runs");
-		domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-		CombinedDomainCategoryPlot plot = new CombinedDomainCategoryPlot(domainAxis);
+		final CategoryAxis xAxis = new CategoryAxis("Runs");
+		xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+		CombinedDomainCategoryPlot plot = new CombinedDomainCategoryPlot(xAxis);
 
 		plot.add(this.categoryPlot);
 
@@ -122,7 +122,7 @@ public class ProfileChart {
 
 	public void updateValueType(AbundanceValueType valueType) {
 		this.valueType = valueType;
-		this.rangeAxis1.setLabel(valueType.getCaption());
+		this.xAxis.setLabel(valueType.getCaption());
 		updateChartData(lastData);
 	}
 }

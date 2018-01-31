@@ -13,7 +13,7 @@ public enum AbundanceValueType {
 		Double v = new Double(value);
 		return v.isInfinite() || v.isNaN() || value == 0.0 ? -1. : Math.log10(value);
 	}, "log10(abundance)"), 
-	ARCSIN(value -> {
+	ARCSINH(value -> {
 		return Math.log(value + Math.sqrt(value*value + 1.0));
 	}, "arcsinh(abundance)");
 	

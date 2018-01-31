@@ -22,7 +22,6 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.mpc.pqi.model.protein.PQIModel;
 import de.mpc.pqi.view.GridBagHelper;
 
 /**
@@ -54,16 +53,16 @@ public class ProteinTree extends JPanel {
 	/** Static final string for "Log10"-Radiobutton */
 	private static final String LOG10 = "log10(abundance)";
 	/** Static final string for "Arcsin"-Radiobutton */
-	private static final String ARCSIN = "arcsin(abundance)";
+	private static final String ARCSIN = "arcsinh(abundance)";
 
 	private JLabel abundanceValueType;
 	private JRadioButton abundanceValueButton;
 	private JRadioButton log10ValueButton;
-	private JRadioButton arcsinValueButton;
+	private JRadioButton arcsinhValueButton;
 	private ButtonGroup abundanceValueButtonGroup;
 
 	/** Maps a filter function to every JRadioButton choice */
-	private static final Map<String, Function<PQIModel, Boolean>> filterActionMap = new HashMap<>();
+	private static final Map<String, Function<String, Boolean>> filterActionMap = new HashMap<>();
 	/** Static final string for "Contains"-Radiobutton */
 	private static final String CONTAINS = "Contains";
 	/** Static final string for "Prefix"-Radiobutton */
@@ -118,10 +117,10 @@ public class ProteinTree extends JPanel {
 		initGUI();
 
 		filterActionMap.put(CONTAINS, data -> {
-			return data.getName().trim().toLowerCase().contains(filterTextField.getText().trim().toLowerCase());
+			return data.trim().toLowerCase().contains(filterTextField.getText().trim().toLowerCase());
 		});
 		filterActionMap.put(PREFIX, data -> {
-			return data.getName().trim().toLowerCase().startsWith(filterTextField.getText().trim().toLowerCase());
+			return data.trim().toLowerCase().startsWith(filterTextField.getText().trim().toLowerCase());
 		});
 
 		initLayout();
@@ -154,11 +153,11 @@ public class ProteinTree extends JPanel {
 		abundanceValueType = new JLabel("Show Value as:");
 		abundanceValueButton = new JRadioButton(ABUNDANCE);
 		log10ValueButton = new JRadioButton(LOG10);
-		arcsinValueButton = new JRadioButton(ARCSIN);
+		arcsinhValueButton = new JRadioButton(ARCSIN);
 		abundanceValueButtonGroup = new ButtonGroup();
 		abundanceValueButtonGroup.add(abundanceValueButton);
 		abundanceValueButtonGroup.add(log10ValueButton);
-		abundanceValueButtonGroup.add(arcsinValueButton);
+		abundanceValueButtonGroup.add(arcsinhValueButton);
 		abundanceValueButtonGroup.setSelected(abundanceValueButton.getModel(), true);
 
 		selectionModel = new DefaultTreeSelectionModel();
@@ -193,7 +192,7 @@ public class ProteinTree extends JPanel {
 		add(abundanceValueType, constraints.getConstraints(0, 3));
 		add(abundanceValueButton, constraints.getConstraints(1, 3));
 		add(log10ValueButton, constraints.getConstraints(2, 3));
-		add(arcsinValueButton, constraints.getConstraints(3, 3));
+		add(arcsinhValueButton, constraints.getConstraints(3, 3));
 
 		add(scrollPane, constraints.getConstraints(0, 4, 4, 1));
 
@@ -253,7 +252,7 @@ public class ProteinTree extends JPanel {
 		
 		abundanceValueButton.setActionCommand("abundance");
 		log10ValueButton.setActionCommand("log10");
-		arcsinValueButton.setActionCommand("arcsin");
+		arcsinhValueButton.setActionCommand("arcsinh");
 	}
 
 	/**
@@ -301,6 +300,6 @@ public class ProteinTree extends JPanel {
 	public void addAbundanceValueButtonListener(ActionListener listener) {
 		this.abundanceValueButton.addActionListener(listener);
 		this.log10ValueButton.addActionListener(listener);
-		this.arcsinValueButton.addActionListener(listener);
+		this.arcsinhValueButton.addActionListener(listener);
 	}
 }
