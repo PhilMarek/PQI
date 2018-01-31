@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionListener;
@@ -21,9 +22,9 @@ import org.quinto.swing.table.view.JBroTable;
 import org.quinto.swing.table.view.JBroTableModel;
 
 import de.mpc.pqi.model.protein.PeptideModel;
-import de.mpc.pqi.model.protein.ProteinModel;
 import de.mpc.pqi.model.protein.PeptideModel.State;
 import de.mpc.pqi.model.protein.PeptideModel.State.Run;
+import de.mpc.pqi.model.protein.ProteinModel;
 
 public class PeptideTable {
 
@@ -68,17 +69,54 @@ public class PeptideTable {
 					boolean hasFocus, int row, int column) {
 				Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 						column);
-				if (row % 2 == 0) {
-					c.setBackground(Color.WHITE);
-				} else {
-					c.setBackground(Color.LIGHT_GRAY);
+				if (!isSelected) {
+					if (row % 2 == 0) {
+						c.setBackground(Color.WHITE);
+					} else {
+						c.setBackground(Color.LIGHT_GRAY);
+					}
 				}
 				return c;
 			}
 
 		});
+		this.table.setDefaultRenderer(Boolean.class, new TableCellRenderer() {
+			private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				if (value instanceof Boolean) {
+					JCheckBox cb = new JCheckBox();
+					if (value != null) cb.setSelected((boolean)value);
+					if (!isSelected) {
+						if (row % 2 == 0) {
+							cb.setBackground(Color.WHITE);
+						} else {
+							cb.setBackground(Color.LIGHT_GRAY);
+						}
+					} else {
+						cb.setBackground(new Color(51, 153, 255));
+					}
+					return cb;
+				} else {
+					Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+							column);
+					if (!isSelected) {
+						if (row % 2 == 0) {
+							c.setBackground(Color.WHITE);
+						} else {
+							c.setBackground(Color.LIGHT_GRAY);
+						}
+					}
+					return c;
+				}
+				
+				
+			}
+		});
 		
-//		this.table.setAutoCreateRowSorter(true);
+		
+		this.table.setAutoCreateRowSorter(true);
 		
 		return this.table.getScrollPane();
 	}
@@ -174,7 +212,12 @@ public class PeptideTable {
 	}
 
 	public int[] getSelectedRows() {
-		return this.table.getSelectedRows();
+		int[] selectedRows = this.table.getSelectedRows();
+		int[] selectedIndizes = new int[selectedRows.length];
+		for (int i = 0 ; i < selectedRows.length ; i++) {
+			selectedIndizes[i] = this.table.convertRowIndexToModel(selectedRows[i]);
+		}
+		return selectedIndizes;
 	}
 
 	public void updateValueType(AbundanceValueType abundanceValueType) {
