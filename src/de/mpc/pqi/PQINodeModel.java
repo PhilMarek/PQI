@@ -9,8 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DataType;
+import org.knime.core.data.def.BooleanCell;
+import org.knime.core.data.def.BooleanCell.BooleanCellFactory;
+import org.knime.core.data.def.DefaultRow;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -28,9 +34,9 @@ import de.mpc.pqi.model.properties.PeptideQuantificationFileSettings;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
 import de.mpc.pqi.model.protein.PeptideModel;
-import de.mpc.pqi.model.protein.ProteinModel;
 import de.mpc.pqi.model.protein.PeptideModel.State;
 import de.mpc.pqi.model.protein.PeptideModel.State.Run;
+import de.mpc.pqi.model.protein.ProteinModel;
 
 
 /**
@@ -40,6 +46,15 @@ import de.mpc.pqi.model.protein.PeptideModel.State.Run;
  * @author 
  */
 public class PQINodeModel extends NodeModel {
+//	public static class SelectionRow extends DefaultRow {
+//
+//		public SelectionRow(String rowId, List<DataCell> row) {
+//			super(rowId, row);
+//			// TODO Auto-generated constructor stub
+//		}
+//		
+//	}
+	
     // the logger instance
     private static final NodeLogger logger = NodeLogger.getLogger(PQINodeModel.class);
         
@@ -68,6 +83,18 @@ public class PQINodeModel extends NodeModel {
     	
     	BufferedDataTable quantPeptides = inData[0];
     	BufferedDataTable quantProteins = inData[1];
+    	BufferedDataTable fasta = inData[2];
+    	
+    	Map<String, String> fastaMapping = new HashMap<>();
+    	if (fasta != null) {
+    		fasta.forEach(row -> {
+    			String s = row.getCell(0).toString();
+    			if (s.startsWith(">")){
+    				int index = s.indexOf(" ");
+    				if (index > 0) fastaMapping.put(s.substring(1, index), s.substring(index));
+    			}
+    		});
+    	}	
     	
     	ProteinModel notUsedPeptides = new ProteinModel("Not used for quantification");
     	proteins.add(notUsedPeptides);
@@ -76,6 +103,18 @@ public class PQINodeModel extends NodeModel {
     	quantProteins.forEach(proteinData -> {
     		String proteinGroupName = proteinData.getKey().toString();
     		ProteinModel protein = new ProteinModel(proteinGroupName);
+    		boolean first = true;
+    		String description = "";
+    		for (String proteinName : proteinGroupName.split("/")) {
+
+    			if (fastaMapping.containsKey(proteinName)){
+    				description += (first ? "" : "/") + fastaMapping.get(proteinName);
+    				if (first) first = false;
+    			}
+    		}
+
+    		protein.setDescription(description);
+    		
     		Set<String> set = new HashSet<>();
     		for (String proteinName : proteinGroupName.split("/")) {
     			quantifiedProteins.put(proteinName, protein);
@@ -138,10 +177,22 @@ public class PQINodeModel extends NodeModel {
     		}
     	});
     	
-    	//TODO
-        DataColumnSpec[] allColSpecs = new DataColumnSpec[0];
-        DataTableSpec outputSpec = new DataTableSpec(allColSpecs);
+        DataColumnSpec[] outputColumns = new DataColumnSpec[quantPeptides.getDataTableSpec().getNumColumns() + 1];
+    	for (int i = 0 ; i < quantPeptides.getDataTableSpec().getNumColumns() ; i++) {
+    		outputColumns[i] = quantPeptides.getDataTableSpec().getColumnSpec(i);
+    	}
+    	outputColumns[quantPeptides.getDataTableSpec().getNumColumns()] = new DataColumnSpecCreator("selected",
+    		DataType.getType(BooleanCell.class)).createSpec();
+        DataTableSpec outputSpec = new DataTableSpec(outputColumns);
         BufferedDataContainer container = exec.createDataContainer(outputSpec);
+        quantPeptides.forEach(entry -> {
+        	DataCell[] cells = new DataCell[entry.getNumCells() + 1];
+        	for (int i = 0 ; i < entry.getNumCells() ; i++) {
+        		cells[i] = entry.getCell(i);
+        	}
+        	cells[entry.getNumCells()] = BooleanCellFactory.create(true);
+        	container.addRowToTable(new DefaultRow(entry.getKey(), cells));
+        });
         container.close();
         BufferedDataTable out = container.getTable();
         return new BufferedDataTable[]{out};
