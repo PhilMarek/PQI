@@ -26,7 +26,17 @@ public class AggregationTableModel extends AbstractTableModel {
 		this.proteinModel = model;
 
 		initColumns(model);
-
+		
+		List<Object> proteinRowData = new ArrayList<>();
+		proteinRowData.add(model.getName());
+		for (State state : proteinModel.getPeptides().get(0).getStates()) {
+			proteinRowData.add("");
+			proteinRowData.add(Math.round(proteinModel.getMean(state.getName(), reference) * 100.0) / 100.0);
+		}
+		proteinRowData.add("");
+		proteinRowData.add("");
+		data.add(proteinRowData);
+		
 		for (PeptideModel peptideModel : model.getPeptides()) {
 			List<Object> rowData = new ArrayList<>();
 
