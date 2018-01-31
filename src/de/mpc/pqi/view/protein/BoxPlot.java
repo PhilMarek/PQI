@@ -18,54 +18,65 @@ import de.mpc.pqi.model.protein.PeptideModel;
 import de.mpc.pqi.model.protein.PeptideModel.State;
 import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 
-public class BoxPlot {
+public class BoxPlot extends ChartPanel {
+	private static final long serialVersionUID = -5485704018928241705L;
+	
+	private PeptideModel model;
+	private AbundanceValueType abundanceValueType = AbundanceValueType.ABUNDANCE;
 
 	private CategoryPlot categoryPlot;
-
-	private BoxAndWhiskerCategoryDataset createDataSet(PeptideModel peptideModel) {
-
-		final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
-
-		if(peptideModel != null){
-			for (State state : peptideModel.getStates()) {
-				List<Double> values = new ArrayList<>();
-
-				for (Run run : state.getRuns()) {
-					values.add(run.getAbundance());
-				}
-				
-				dataset.add(values, peptideModel.getName(), state.getName());
-			}
-		}
-
-		return dataset;
+	private NumberAxis yAxis;
+	private CategoryAxis xAxis;
+	
+	public BoxPlot() {
+		super(null);
+		initGUI();
+		setSize(50, 100);
 	}
-
-	@SuppressWarnings("deprecation")
-	public ChartPanel getView(PeptideModel peptideModel) {
-
-		BoxAndWhiskerCategoryDataset dataset = createDataSet(peptideModel);
-
-		CategoryAxis xAxis = new CategoryAxis("State");
+	
+	private void initGUI() {
+		BoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
+		
+		xAxis = new CategoryAxis("State");
 		xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-		NumberAxis yAxis = new NumberAxis("Abundance");
+		
+		yAxis = new NumberAxis(abundanceValueType.getCaption());
 		yAxis.setAutoRangeIncludesZero(false);
+		
 		BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
 		renderer.setFillBox(true);
 		renderer.setToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
 		renderer.setOutlinePaint(null);
-		
 
-		this.categoryPlot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
-
-		ChartPanel chartPanel = new ChartPanel(
-				new JFreeChart(this.categoryPlot));
-		chartPanel.setSize(50, 100);
-
-		return chartPanel;
+		categoryPlot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
+		setChart(new JFreeChart(this.categoryPlot));
 	}
 
-	public void update(PeptideModel peptideModel) {
-		this.categoryPlot.setDataset(createDataSet(peptideModel));
+	private void update() {
+		DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
+		if(model != null){
+			for (State state : model.getStates()) {
+				List<Double> values = new ArrayList<>();
+
+				for (Run run : state.getRuns()) {
+					values.add(abundanceValueType.transformValue(run.getAbundance()));
+				}
+				
+				dataset.add(values, model.getName(), state.getName());
+			}
+		}
+		categoryPlot.setDataset(dataset);
+
+		yAxis.setLabel(abundanceValueType.getCaption());
+	}
+
+	public void setModel(PeptideModel peptideModel) {
+		this.model = peptideModel;
+		update();
+	}
+
+	public void setValueType(AbundanceValueType abundanceValueType) {
+		this.abundanceValueType = abundanceValueType;
+		update();
 	}
 }
