@@ -140,7 +140,7 @@ public class DataPropertyPanel extends JPanel {
 					elements.forEach(element -> numberColumns.forEach((index, string) -> {
 						if (element.equals(string)) {
 							unusedNumberColumns.remove(index);
-							RunConfiguration runConfiguration = new RunConfiguration("R" + (stateConfig.getNumberOfRuns() + 1));
+							RunConfiguration runConfiguration = new RunConfiguration(string);
 							runConfiguration.setColumn(index);
 							stateConfig.addRun(runConfiguration);
 						}
@@ -164,6 +164,14 @@ public class DataPropertyPanel extends JPanel {
 					int currentNumberOfStates = stateModel.getRowCount();
 					if (numberOfStates < currentNumberOfStates) {
 						for (int stateIndex = currentNumberOfStates - 1 ; stateIndex >= numberOfStates ; stateIndex--) {
+							StateConfiguration stateConfig = (StateConfiguration) stateModel.getValueAt(stateIndex, 0);
+							stateConfig.getRuns().forEach(run -> {
+								numberColumns.forEach((index, string) -> {
+									if (run.getName().equals(string)) {
+										unusedNumberColumns.put(index, numberColumns.get(index));
+									}
+								});
+							});
 							stateModel.removeRow(stateIndex);
 						}
 					} else {
@@ -224,7 +232,6 @@ public class DataPropertyPanel extends JPanel {
 			if (string.equals(proteinColumnComboBox.getSelectedItem())) pqf.setProteinColumn(number);
 		});
 		
-
 		List<StateConfiguration> stateConfigurations = new ArrayList<>();
 		for (int row = 0 ; row < stateModel.getRowCount() ; row++) {
 			stateConfigurations.add((StateConfiguration) stateModel.getValueAt(row, 0));
