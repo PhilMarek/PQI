@@ -16,6 +16,7 @@ public class ProteinModel extends PQIModel {
 	private String name;
 	/** Found peptides for this protein */
 	private Set<PeptideModel> peptides;
+	private String description = "";
 
 	/**
 	 * Constructor.
@@ -48,6 +49,22 @@ public class ProteinModel extends PQIModel {
 	 */
 	public void addPeptide(PeptideModel peptide) {
 		peptides.add(peptide);
+	}
+
+	public double getMean(String string, String reference) {
+		double mean = 0;
+		for (PeptideModel peptide : peptides) {
+			mean += peptide.getRatioOfMeans(string, reference);
+		}
+		return mean / peptides.size();
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 
 }
