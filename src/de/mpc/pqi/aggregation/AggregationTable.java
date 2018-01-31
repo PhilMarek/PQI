@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.InputMap;
+import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
@@ -13,17 +14,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-public class AggregationTabel extends JScrollPane {
-
-	/**
-	 * 
-	 */
+public class AggregationTable extends JScrollPane {
 	private static final long serialVersionUID = -8110151826617663593L;
 
 	private JTable table;
 
-	public AggregationTabel() {
-
+	public AggregationTable() {
 		this.table = new JTable();
 		this.table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		this.table.setFillsViewportHeight(true);
@@ -45,9 +41,8 @@ public class AggregationTabel extends JScrollPane {
 				if (table.getModel() instanceof AggregationTableModel) {
 					AggregationTableModel model = (AggregationTableModel) table.getModel();
 					int row = table.rowAtPoint(evt.getPoint());
-					if (row >= 0) {
+					if (row > 0) {
 						model.rowSelect(row);
-
 						table.repaint();
 					}
 				}
@@ -73,9 +68,35 @@ public class AggregationTabel extends JScrollPane {
 			}
 
 		});
+		this.table.setDefaultRenderer(Boolean.class, new TableCellRenderer() {
+			private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+			
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				if (value instanceof Boolean) {
+					JCheckBox cb = new JCheckBox();
+					if (value != null) cb.setSelected((boolean)value);
+					if (row % 2 == 0) {
+						cb.setBackground(Color.WHITE);
+					} else {
+						cb.setBackground(Color.LIGHT_GRAY);
+					}
+					return cb;
+				} else {
+					Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+							column);
+					if (row % 2 == 0) {
+						c.setBackground(Color.WHITE);
+					} else {
+						c.setBackground(Color.LIGHT_GRAY);
+					}
+					return c;
+				}
+			}
+		});
 		
 //		this.table.setAutoCreateRowSorter(true);
-
 		getViewport().add(this.table);
 	}
 
@@ -84,6 +105,5 @@ public class AggregationTabel extends JScrollPane {
 			this.table.setModel(tableModel);
 			this.table.repaint();
 		}
-
 	}
 }
