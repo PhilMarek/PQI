@@ -1,7 +1,9 @@
 package de.mpc.pqi.view.protein;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -52,26 +54,25 @@ public class ProteinTreeModel implements TreeModel {
 	 * @param filterForProteins 
 	 * @return
 	 */
-	public ProteinTreeModel getFilteredModel(final String filterString, Function<PQIModel, Boolean> function, boolean filterForProteins) {
+	public ProteinTreeModel getFilteredModel(final String filterString, Function<String, Boolean> function, boolean filterForProteins) {
 		//if root fulfills the filter conditions or if filterString is empty, just return everything
-		if (function.apply(getRoot()) || filterString.trim().isEmpty()) return this;
+		if (function.apply(getRoot().getName()) || filterString.trim().isEmpty()) return this;
 
-		List<ProteinModel> filteredProteins = new ArrayList<>();
+		Set<ProteinModel> filteredProteins = new HashSet<>();
 		if (filterForProteins) {
 			// Filtering proteins. If a protein fulfills the filter condition, all corresponding peptides are added.
-			proteinData.stream().filter(protein -> function.apply(protein)).collect(Collectors.toList()).forEach(protein -> {
+			proteinData.stream().filter(protein -> function.apply(protein.getName()) || function.apply(protein.getDescription())).collect(Collectors.toList()).forEach(protein -> {
 				filteredProteins.add(protein);
 			});
-			return new ProteinTreeModel(filteredProteins);
 		} else {
 			// Filtering peptides. If any peptide of a protein fulfills the filter condition, the complete protein is added.
 			proteinData.forEach(protein -> {
 				List<PeptideModel> peptides = protein.getPeptides().stream()
-						.filter(peptide -> function.apply(peptide)).collect(Collectors.toList());
+						.filter(peptide -> function.apply(peptide.getName())).collect(Collectors.toList());
 				if (!peptides.isEmpty()) filteredProteins.add(protein);
 			});
-			return new ProteinTreeModel(filteredProteins);
 		}
+		return new ProteinTreeModel(new ArrayList<>(filteredProteins));
 	}
 
 	/**
