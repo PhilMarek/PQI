@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
 
 import org.quinto.swing.table.model.IModelFieldGroup;
 import org.quinto.swing.table.model.ModelData;
@@ -33,6 +34,8 @@ public class PeptideTable {
 	private ProteinModel proteinModel;
 
 	private AbundanceValueType valueType;
+	
+	private boolean internalUpdate = false;
 
 	public JScrollPane initTable(ProteinModel proteinModel, AbundanceValueType valueType) {
 		this.table = new JBroTable();
@@ -42,13 +45,13 @@ public class PeptideTable {
 			
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
-				if (columnIndex == 17) return Boolean.class;
+				if (columnIndex == 16) return Boolean.class;
 				else return super.getColumnClass(columnIndex);
 			}
 			
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return columnIndex == 17;
+				return false;
 			}
 		});
 
@@ -115,8 +118,15 @@ public class PeptideTable {
 			}
 		});
 		
-		
 		this.table.setAutoCreateRowSorter(true);
+		this.table.getRowSorter().addRowSorterListener(e -> {
+			// fireTableDataChanged lets the row sorter sort again, thus, internalUpdate prevents endless loops
+			if (!internalUpdate) {
+				internalUpdate = true;
+				table.getModel().fireTableDataChanged();
+				internalUpdate = false;
+			}
+		});
 		
 		return this.table.getScrollPane();
 	}
@@ -127,7 +137,6 @@ public class PeptideTable {
 
 		this.proteinModel = proteinModel;
 
-		ModelField proteinField = new ModelField("protein", "Protein");
 
 		ModelField peptidesField = new ModelField("peptides", "Peptides");
 
@@ -147,16 +156,11 @@ public class PeptideTable {
 			abundacesField.withChild(s);
 		}
 
-		IModelFieldGroup groups[] = new IModelFieldGroup[] { proteinField, peptidesField, abundacesField, uniqueField };
+		IModelFieldGroup groups[] = new IModelFieldGroup[] { peptidesField, abundacesField, uniqueField };
 
 		ModelField fields[] = ModelFieldGroup.getBottomFields(groups);
 
 		List<ModelRow> rows = new ArrayList<>();
-
-		ModelRow proteinIdentifierRow = new ModelRow(1);
-		proteinIdentifierRow.setValue(0, proteinModel.getName());
-
-		rows.add(proteinIdentifierRow);
 
 		for (PeptideModel peptideModel : proteinModel.getPeptides()) {
 

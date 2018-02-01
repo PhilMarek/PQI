@@ -16,8 +16,6 @@ public class AggregationView extends JPanel {
 	private static final long serialVersionUID = 2665924781251637075L;
 
 	private AggregationModel model;
-
-	private JLabel proteinNameLabel;
 	
 	private JLabel referenceLabel;
 	private JComboBox<String> referenceComboBox;
@@ -32,7 +30,6 @@ public class AggregationView extends JPanel {
 	}
 
 	private void initGui() {
-		this.proteinNameLabel = new JLabel("Protein: ");
 		this.referenceLabel = new JLabel("Reference: ");
 
 		this.referenceComboBox = new JComboBox<String>();
@@ -42,14 +39,13 @@ public class AggregationView extends JPanel {
 	}
 
 	private void initLayout() {
-		GridBagHelper constraints = new GridBagHelper(new double[] { 0, 0.2 }, new double[] { 0, 0, 0.1});
+		GridBagHelper constraints = new GridBagHelper(new double[] { 0, 0.1 }, new double[] { 0, 0.1 });
 		setLayout(new GridBagLayout());
 
 		add(referenceLabel, constraints.getConstraints(0, 0));
 		add(referenceComboBox, constraints.getConstraints(1, 0));
 
-		add(proteinNameLabel, constraints.getConstraints(2, 0));
-		add(table, constraints.getConstraints(0, 1, 4, 1));
+		add(table, constraints.getConstraints(0, 1, 2, 1));
 	}
 	
 	private void initControl() {
@@ -78,9 +74,6 @@ public class AggregationView extends JPanel {
 		}
 		
 		model.setProteinModel(proteinModel);
-
 		table.update(model.getTableModel());
-		
-		proteinNameLabel.setText("Protein: " + proteinModel.getName() + " " + proteinModel.getDescription());
 	}
 }

@@ -18,6 +18,8 @@ public class AggregationTable extends JScrollPane {
 	private static final long serialVersionUID = -8110151826617663593L;
 
 	private JTable table;
+	
+	private boolean internalUpdate = false;
 
 	public AggregationTable() {
 		this.table = new JTable();
@@ -95,8 +97,15 @@ public class AggregationTable extends JScrollPane {
 				}
 			}
 		});
-		
-//		this.table.setAutoCreateRowSorter(true);
+		this.table.setAutoCreateRowSorter(true);
+		this.table.getRowSorter().addRowSorterListener(e -> {
+			// fireTableDataChanged lets the row sorter sort again, thus, internalUpdate prevents endless loops
+			if (!internalUpdate) {
+				internalUpdate = true;
+				((AggregationTableModel)table.getModel()).fireTableDataChanged();
+				internalUpdate = false;
+			}
+		});
 		getViewport().add(this.table);
 	}
 

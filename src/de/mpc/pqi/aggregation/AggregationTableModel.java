@@ -28,7 +28,8 @@ public class AggregationTableModel extends AbstractTableModel {
 		initColumns(model);
 		
 		List<Object> proteinRowData = new ArrayList<>();
-		proteinRowData.add(model.getName());
+		proteinRowData.add("Mean of Ratios");
+		proteinRowData.add("");
 		for (State state : proteinModel.getPeptides().get(0).getStates()) {
 			proteinRowData.add("");
 			proteinRowData.add(Math.round(proteinModel.getMean(state.getName(), reference) * 100.0) / 100.0);
@@ -40,6 +41,7 @@ public class AggregationTableModel extends AbstractTableModel {
 		for (PeptideModel peptideModel : model.getPeptides()) {
 			List<Object> rowData = new ArrayList<>();
 
+			rowData.add("");
 			rowData.add(peptideModel.getName());
 			for (State state : peptideModel.getStates()) {
 				rowData.add(Math.round(state.getMean()*100.0)/100.0);
@@ -54,6 +56,7 @@ public class AggregationTableModel extends AbstractTableModel {
 	}
 
 	private void initColumns(ProteinModel model) {
+		columns.add("");
 		columns.add("Peptides");
 		PeptideModel peptideModel = model.getPeptides().get(0);
 		for (State state : peptideModel.getStates()) {
