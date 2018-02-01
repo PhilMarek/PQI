@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
@@ -30,6 +31,12 @@ public class ProteinView extends JPanel {
 	private BoxPlot boxPlot;
 	private AggregationView aggregationView;
 
+
+	private JLabel proteinNameLabel;
+	private JLabel proteinNameValue;
+	private JLabel proteinDescriptionLabel;
+	private JLabel proteinDescriptionValue;
+	
 	private AbundanceValueType abundanceValueType = AbundanceValueType.ABUNDANCE;
 
 	public ProteinView() {
@@ -44,6 +51,12 @@ public class ProteinView extends JPanel {
 		table = new PeptideTable();
 		boxPlot = new BoxPlot();
 		aggregationView = new AggregationView();
+		
+
+		proteinNameLabel = new JLabel("Protein: ");
+		proteinDescriptionLabel = new JLabel("Description: ");
+		proteinNameValue = new JLabel("");
+		proteinDescriptionValue = new JLabel("");
 	}
 
 	private void initLayout() {
@@ -53,10 +66,20 @@ public class ProteinView extends JPanel {
 		add(chart.createChart(null, abundanceValueType), constraints.getConstraints(1, 0));
 		add(boxPlot, constraints.getConstraints(2, 0));
 
+		JPanel proteinPane = new JPanel();
+		proteinPane.setLayout(new GridBagLayout());
+		GridBagHelper proteinConstraints = new GridBagHelper(new double[] { 0, 0, 0.1 }, new double[] { 0, 0.1 });
+		
 		JTabbedPane tabPane = new JTabbedPane();
 		tabPane.add("Details", table.initTable(null, abundanceValueType));
 		tabPane.add("Aggregation", aggregationView);
-		add(tabPane, constraints.getConstraints(0, 1, 3, 1));
+		proteinPane.add(proteinNameLabel, proteinConstraints.getConstraints(0, 0));
+		proteinPane.add(proteinNameValue, proteinConstraints.getConstraints(1, 0));
+		proteinPane.add(proteinDescriptionLabel, proteinConstraints.getConstraints(0, 1));
+		proteinPane.add(proteinDescriptionValue, proteinConstraints.getConstraints(1, 1));
+		proteinPane.add(tabPane, proteinConstraints.getConstraints(0, 2, 2, 1));
+		
+		add(proteinPane, constraints.getConstraints(0, 1, 3, 1));
 	}
 
 	private void initControl() {
@@ -71,6 +94,8 @@ public class ProteinView extends JPanel {
 					chart.updateChartData(proteinModel);
 					table.setData(proteinModel, abundanceValueType);
 					aggregationView.setModel(proteinModel);
+					proteinNameValue.setText(proteinModel.getName());
+					proteinDescriptionValue.setText(proteinModel.getDescription());
 				}
 			}
 		});
