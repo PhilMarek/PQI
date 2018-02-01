@@ -90,8 +90,15 @@ public class PQINodeModel extends NodeModel {
     		fasta.forEach(row -> {
     			String s = row.getCell(0).toString();
     			if (s.startsWith(">")){
-    				int index = s.indexOf(" ");
-    				if (index > 0) fastaMapping.put(s.substring(1, index), s.substring(index));
+    				int indexFirstSpace = s.indexOf(" ");
+    				int indexOS = s.indexOf(" OS=");
+    				if (indexFirstSpace > 0) {
+    					if (indexOS > 0) {
+    						fastaMapping.put(s.substring(1, indexFirstSpace), s.substring(indexFirstSpace, indexOS));
+    					} else {
+    						fastaMapping.put(s.substring(1, indexFirstSpace), s.substring(indexFirstSpace));
+    					}
+    				}
     			}
     		});
     	}	
