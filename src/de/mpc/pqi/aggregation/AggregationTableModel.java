@@ -106,16 +106,10 @@ public class AggregationTableModel extends AbstractTableModel {
 	}
 
 	public void rowSelect(int rowIndex) {
-		Boolean b = (Boolean) data.get(rowIndex).get(getColumnCount() - 1);
+		boolean previouslySelected = (Boolean) data.get(rowIndex).get(getColumnCount() - 1);
+		proteinModel.getPeptides().get(rowIndex - 1).setSelected(!previouslySelected);
 
-		if (b) {
-			b = new Boolean(false);
-			proteinModel.getPeptides().get(rowIndex).setSelected(b);
-		} else {
-			b = new Boolean(true);
-			proteinModel.getPeptides().get(rowIndex).setSelected(b);
-		}
-		data.get(rowIndex).set(getColumnCount() - 1, b);
+		data.get(rowIndex).set(getColumnCount() - 1, !previouslySelected);
 	}
 
 	public ProteinModel getProteinModel() {
