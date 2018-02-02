@@ -1,7 +1,18 @@
 package de.mpc.pqi;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.knime.core.node.NodeView;
 
+import de.mpc.pqi.model.protein.PeptideModel;
+import de.mpc.pqi.model.protein.ProteinModel;
 import de.mpc.pqi.view.ProteinView;
 
 /**
@@ -48,8 +59,51 @@ public class PQINodeView extends NodeView<PQINodeModel> {
      */
     @Override
     protected void onClose() {
-    
-        // TODO things to do when closing the view
+    	JFileChooser fileChooser = new JFileChooser();
+    	fileChooser.setFileFilter(new FileNameExtensionFilter("CSV", "csv"));
+    	if (fileChooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+    		String path = fileChooser.getSelectedFile().getAbsolutePath();
+    		if (!path.endsWith(".csv")) path += ".csv";
+    		File output = new File(path);
+    		
+    		try (FileWriter writer = new FileWriter(output)) {
+    			PQINodeModel model = getNodeModel();
+
+    			writer.append("\"peptide\"\t\"proteins\"\t");
+    			model.getData().get(0).getPeptides().get(0).getStates().forEach(state -> {
+    				state.getRuns().forEach(run -> {
+						try {
+							writer.append("\"" + run.getName() + "\"\t");
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					});
+    			});
+    			writer.append("\"unique\"\t\"selected\"\n");
+    			
+	    		Set<String> writtenPeptides = new HashSet<>();
+	    		for (ProteinModel protein : model.getData()) {
+	    			for (PeptideModel peptide : protein.getPeptides()) {
+	    				if (!writtenPeptides.contains(peptide.getName())) {
+	    					writtenPeptides.add(peptide.getName());
+	    					writer.append(peptide.getName() + "\t");
+	    					writer.append(protein.getName() + "\t");
+	    					peptide.getStates().forEach(state -> state.getRuns().forEach(run -> {
+	    						try {
+									writer.append(run.getAbundance() + "\t");
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+	    					}));
+	    					writer.append(peptide.isUnique() + "\t");
+	    					writer.append(peptide.isSelected() + "\t\n");
+	    				}
+	    			}
+	    		}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
     }
 
     /**
