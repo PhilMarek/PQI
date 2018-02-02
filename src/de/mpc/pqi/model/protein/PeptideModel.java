@@ -60,7 +60,6 @@ public class PeptideModel extends PQIModel {
 	private String name;
 	/** The boolean indicating if this protein is used for quantification **/
 	private boolean usedForQuantification;
-	private boolean activated = true;
 	private List<State> states;
 	private boolean unique;
 	private boolean selected = true;
@@ -68,14 +67,6 @@ public class PeptideModel extends PQIModel {
 	public PeptideModel(String name, List<State> states) {
 		this.name = name;
 		this.states = states;
-	}
-
-	public boolean isActivated() {
-		return activated;
-	}
-
-	public void setActivated(boolean activated) {
-		this.activated = activated;
 	}
 
 	@Override
