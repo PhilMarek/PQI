@@ -44,7 +44,7 @@ public class AggregationTable extends JScrollPane {
 					AggregationTableModel model = (AggregationTableModel) table.getModel();
 					int row = table.rowAtPoint(evt.getPoint());
 					if (row > 0) {
-						model.rowSelect(row);
+						model.rowSelect(table.getRowSorter().convertRowIndexToModel(row));
 						table.repaint();
 					}
 				}
