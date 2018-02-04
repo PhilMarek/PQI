@@ -105,19 +105,18 @@ public class ProteinView extends JPanel {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					List<PeptideModel> peptideModels = new ArrayList<>();
-
-					for (int i : table.getSelectedRows()) {
-						if (i == 0) {
-							chart.updateChartData(table.getProteinModel());
-						} else {
-							peptideModels.add(table.getValueAt(i - 1));
-						}
-					}
-					if (!peptideModels.isEmpty()) {
-						chart.updateChartData(peptideModels);
-						boxPlot.setModel(peptideModels.get(0));
+					if (table.getSelectedRows().length == 0) {
+						chart.updateChartData(table.getProteinModel());
 					} else {
-						//TODO deselect charts
+						for (int i : table.getSelectedRows()) {
+							peptideModels.add(table.getValueAt(i));
+						}
+						if (!peptideModels.isEmpty()) {
+							chart.updateChartData(peptideModels);
+							boxPlot.setModel(peptideModels.get(0));
+						} else {
+							//TODO deselect charts
+						}
 					}
 				}
 			}

@@ -12,7 +12,6 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableRowSorter;
 
 import org.quinto.swing.table.model.IModelFieldGroup;
 import org.quinto.swing.table.model.ModelData;
@@ -167,12 +166,9 @@ public class PeptideTable {
 			List<Double> values = getValuesOfPeptide(peptideModel);
 
 			ModelRow row = new ModelRow(fields.length);
+			row.setValue(0, peptideModel.getName());
 			for (int i = 1; i < fields.length - 1; i++) {
-				if (i == 1) {
-					row.setValue(i, peptideModel.getName());
-				} else {
-					row.setValue(i, values.get(i - 2));
-				}
+				row.setValue(i, values.get(i - 1));
 			}
 
 			row.setValue(fields.length - 1, peptideModel.isUnique());
