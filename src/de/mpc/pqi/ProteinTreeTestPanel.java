@@ -20,7 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import de.mpc.pqi.model.properties.CSVFile;
-import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
+import de.mpc.pqi.model.properties.PeptideQuantificationFileConfiguration;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
 import de.mpc.pqi.model.protein.PeptideModel;
@@ -61,10 +61,10 @@ public class ProteinTreeTestPanel extends JPanel {
 		JMenuItem configure = new JMenuItem("Configure");
 		
 		configure.addActionListener(l -> {
-			PepQuantFileConfiguration pepQuantFileConfig = null;
+			PeptideQuantificationFileConfiguration pepQuantFileConfig = null;
 			CSVFile pepQuantFile = null;
 			CSVFile protQuantFile = null;
-			pepQuantFileConfig = (PepQuantFileConfiguration) readObject("pqfc");
+			pepQuantFileConfig = (PeptideQuantificationFileConfiguration) readObject("pqfc");
 			pepQuantFile = (CSVFile) readObject("pepcsv");
 			protQuantFile = (CSVFile) readObject("protcsv");
 
@@ -129,7 +129,7 @@ public class ProteinTreeTestPanel extends JPanel {
 	}
 
 	private static List<ProteinModel> parseData(String[][] peptideQuantificationData, 
-			String[][] proteinQuantificationData, PepQuantFileConfiguration pqf) {
+			String[][] proteinQuantificationData, PeptideQuantificationFileConfiguration pqf) {
 		List<ProteinModel> proteins = new ArrayList<>();
     	Map<String, ProteinModel> proteinMap = new HashMap<>();
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PepQuantFileConfiguration implements Serializable {
+public class PeptideQuantificationFileConfiguration implements Serializable {
 	private static final long serialVersionUID = 7556074706355349214L;
 
 	private int proteinColumn = 0;
@@ -15,7 +15,7 @@ public class PepQuantFileConfiguration implements Serializable {
 	private int[] numberColumnIndizes = new int[0];
 	private List<StateConfiguration> stateConfigurations = new ArrayList<>();
 	
-	public PepQuantFileConfiguration() { 
+	public PeptideQuantificationFileConfiguration() { 
 	}
 
 	public int getProteinColumn() {

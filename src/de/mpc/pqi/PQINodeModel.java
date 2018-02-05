@@ -29,7 +29,7 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.port.PortType;
 
-import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
+import de.mpc.pqi.model.properties.PeptideQuantificationFileConfiguration;
 import de.mpc.pqi.model.properties.PeptideQuantificationFileSettings;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
@@ -60,7 +60,7 @@ public class PQINodeModel extends NodeModel {
         
 	private static final String CFGKEY_PEPTIDE_QUANTIFICATION_FILE = "Peptide quantification file";
     private final PeptideQuantificationFileSettings peptideQuantificationFile = 
-    		new PeptideQuantificationFileSettings(CFGKEY_PEPTIDE_QUANTIFICATION_FILE, new PepQuantFileConfiguration());
+    		new PeptideQuantificationFileSettings(CFGKEY_PEPTIDE_QUANTIFICATION_FILE, new PeptideQuantificationFileConfiguration());
     
     private List<ProteinModel> proteins;
 
@@ -79,7 +79,7 @@ public class PQINodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
     	proteins = new ArrayList<>();
-    	PepQuantFileConfiguration pqf = peptideQuantificationFile.getPeptideQuantificationFile();
+    	PeptideQuantificationFileConfiguration pqf = peptideQuantificationFile.getPeptideQuantificationFile();
     	
     	BufferedDataTable quantPeptides = inData[0];
     	BufferedDataTable quantProteins = inData[1];

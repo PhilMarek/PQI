@@ -9,7 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import de.mpc.pqi.model.properties.CSVFile;
-import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
+import de.mpc.pqi.model.properties.PeptideQuantificationFileConfiguration;
 
 public class PropertyDialog extends JDialog {
 	private static final long serialVersionUID = 1284951775403174558L;
@@ -20,7 +20,7 @@ public class PropertyDialog extends JDialog {
 	
 	private CSVFile pepQuantFile;
 	private CSVFile protQuantFile;
-	private PepQuantFileConfiguration pepQuantFileConfig;
+	private PeptideQuantificationFileConfiguration pepQuantFileConfig;
 
 	private CardLayout cardLayout;
 	
@@ -82,7 +82,7 @@ public class PropertyDialog extends JDialog {
 			if (index == 0) {
 				//TODO validation
 				pepQuantFile = pepQuantFilePropertyPanel.getModel();
-				if (pepQuantFileConfig == null) pepQuantFileConfig = new PepQuantFileConfiguration();
+				if (pepQuantFileConfig == null) pepQuantFileConfig = new PeptideQuantificationFileConfiguration();
 //				try {
 					//TODO peptideQuantificationFile.setStringColumnNames(csvFile.getStringColumnNames());
 					//TODO peptideQuantificationFile.setNumberColumnNames(csvFile.getNumberColumnNames());
@@ -107,7 +107,7 @@ public class PropertyDialog extends JDialog {
 		});
 	}
 
-	public PepQuantFileConfiguration getPeptideQuantificationFile() {
+	public PeptideQuantificationFileConfiguration getPeptideQuantificationFile() {
 		return pepQuantFileConfig;
 	}
 	
@@ -119,7 +119,7 @@ public class PropertyDialog extends JDialog {
 		return protQuantFile;
 	}
 	
-	public void setPepQuantFileConfiguration(PepQuantFileConfiguration peptideQuantificationFile) {
+	public void setPepQuantFileConfiguration(PeptideQuantificationFileConfiguration peptideQuantificationFile) {
 		this.pepQuantFileConfig = peptideQuantificationFile;
 		dataPropertyPanel.initSettings(peptideQuantificationFile);
 	}

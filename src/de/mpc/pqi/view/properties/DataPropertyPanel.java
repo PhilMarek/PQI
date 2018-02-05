@@ -20,7 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-import de.mpc.pqi.model.properties.PepQuantFileConfiguration;
+import de.mpc.pqi.model.properties.PeptideQuantificationFileConfiguration;
 import de.mpc.pqi.model.properties.RunConfiguration;
 import de.mpc.pqi.model.properties.StateConfiguration;
 import de.mpc.pqi.view.GridBagHelper;
@@ -197,7 +197,7 @@ public class DataPropertyPanel extends JPanel {
 		return proteinColumnComboBox.getSelectedIndex();
 	}
 
-	public void initSettings(PepQuantFileConfiguration pqf) {
+	public void initSettings(PeptideQuantificationFileConfiguration pqf) {
 		stringColumns = new HashMap<>();
 		for (int i = 0 ; i < pqf.getStringColumnIndizes().length ; i++) {
 			stringColumns.put(pqf.getStringColumnIndizes()[i], pqf.getStringColumnNames()[i]);
@@ -221,8 +221,8 @@ public class DataPropertyPanel extends JPanel {
 		}
 	}
 
-	public PepQuantFileConfiguration getSettings() {
-		PepQuantFileConfiguration pqf = new PepQuantFileConfiguration();
+	public PeptideQuantificationFileConfiguration getSettings() {
+		PeptideQuantificationFileConfiguration pqf = new PeptideQuantificationFileConfiguration();
 		pqf.setStringColumnIndizes(stringColumns.keySet().stream().mapToInt(i -> i).toArray());
 		pqf.setStringColumnNames(stringColumns.values().toArray(new String[0]));
 		pqf.setNumberColumnIndizes(numberColumns.keySet().stream().mapToInt(i -> i).toArray());
