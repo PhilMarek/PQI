@@ -30,21 +30,21 @@ import de.mpc.pqi.model.protein.PeptideModel.State.Run;
 import de.mpc.pqi.view.ProteinView;
 import de.mpc.pqi.view.properties.PropertyDialog;
 
-public class ProteinTreeTestPanel extends JPanel {
+public class ExternalMain extends JPanel {
 	private static final long serialVersionUID = -2631147602208704811L;
 
 	public static void main(String[] args) throws IOException {
 		if (args.length < 1) {
 			System.out.println("Missing program argument: Filepath quants_peptides.csv");
 		} else {
-			new ProteinTreeTestPanel(args[0]);
+			new ExternalMain(args[0]);
 		}
 	}
 
 	private JFrame frame;
 	private ProteinView proteinView;
 	
-	private ProteinTreeTestPanel(String filePath) {
+	private ExternalMain(String filePath) {
 		frame = new JFrame("");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		proteinView = new ProteinView();
