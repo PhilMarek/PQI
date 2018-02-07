@@ -44,7 +44,7 @@ public class PeptideTable {
 			
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
-				if (columnIndex == 16) return Boolean.class;
+				if (columnIndex == getColumnCount() - 1) return Boolean.class;
 				else return super.getColumnClass(columnIndex);
 			}
 			
