@@ -3,25 +3,16 @@
     <name>PQI</name>
     
     <shortDescription>
-        
+        Protein Quantification Inference
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>PQI is a tool which helps you to infer protein quantifications in a user-friendly way.</intro>
         
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+       	<option name="Column for proteins">The column for proteins in the first input file.</option>
+        <option name="Number of States">The number of states for which abundances exist. The list below will be filled automatically with the amount of states.</option>
+        <option name="Table on the left">Shows the states. You can select a state and show the associated runs on the left and you can rename a state by double-clicking on it.</option>
+        <option name="Tables on the right">The left table shows all possible columns for runs. With ">>" you can apply a column as a run for the selected state and it will appear in the right table. With "&lt;&lt;" the run will be removed from the state. You can apply each column to only one state.</option>
     </fullDescription>
     
     <ports>
@@ -29,10 +20,9 @@
         <inPort index="1" name="Protein Quantification File">CSV File which contains the protein quantification</inPort>
         <inPort index="2" name="Protein Identification File">FASTA File which contains protein identification information</inPort>
         
-        <outPort index="0" name="Out-Port name">Description of first output port...</outPort>
+        <outPort index="0" name="Output">CSV File which contains the peptide quantification. The selection in the view is saved after closing it.</outPort>
     </ports>    
     <views>
-        <view index="0" name="name of first view">Description of first view...</view>
-        <!--view index="1" name="name of second view">Description of second view...</view-->
+        <view index="0" name="Protein Quantification Inference">The view displays the loaded protein data. In the tree on the left you can select proteins and filter for names or FASTA descriptions. Further informations of a selected portein are shown below in the two tables. The details table is showing the abundances to each associated peptide. If a peptide or a set of peptides is selected, there values are also shown in the line diagram. If no peptide is selected, all peptides of the selected protein are shown, anyway, the selected protein is always shown in the box plot. The aggregation table is showing the means and ratio of means of peptides and the protein. With the option "Reference", you can select between which states the ratio is calculated. If you select a peptide, it will be deselected or selected. After closing the view you are prompted for a file name to save all peptide informations and the selection.</view>
     </views>
 </knimeNode>
